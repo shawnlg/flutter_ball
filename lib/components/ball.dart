@@ -74,14 +74,6 @@ class Ball extends Component {
 
   // tell the game engine if this component should be destroyed
   // whenever it asks
-/*  bool destroy() {
-    if (lives > 0) {  // not dead yet
-      return false;
-    } else {  // dead
-      return true;
-    }
-  }
-*/
   bool destroy() => lives <= 0;
 
 }
