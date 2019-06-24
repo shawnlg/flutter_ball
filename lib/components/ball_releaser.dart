@@ -9,7 +9,7 @@ class BallReleaser extends Component {
 
   // instance variables
   FlutterballGame game;
-  int lives = 100;  // how many balls to release until this component quits
+  int lives = 10;  // how many balls to release until this component quits
   double timeOfNextBall;  // when to add another ball
   Random rnd;  // rnandom number generator
 
