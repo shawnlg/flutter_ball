@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flame/components/component.dart';
+import 'package:flame/flame.dart';
 
 class Ball extends Component {
   // instance variables
@@ -34,7 +35,7 @@ class Ball extends Component {
     sizeY = size.height;
 
     // set the speed of the ball
-    // travel in the x and y direction at the speed of speedScale screen widths per second
+    // travel in the x and y direction at the speed of speedScale screen widths/heights per second
     speedX = sizeX*speedScaleX;
     speedY = sizeY*speedScaleY;
   }
@@ -46,6 +47,8 @@ class Ball extends Component {
 
   // update this component whenever the game engine tells you to
   void update(double t) {
+    bool bounce=false;
+
     // move the ball
     x += t*speedX;
     y += t*speedY;
@@ -55,21 +58,30 @@ class Ball extends Component {
       speedX = -speedX;  // reverse direction
       x = 0;  // put it back at the left edge
       lives--;  // a bounce loses a life
+      bounce = true;
     }
     if (x > sizeX) {
       speedX = -speedX;
       x = sizeX;
       lives--;
+      bounce = true;
     }
     if (y < 0) {
       speedY = -speedY;
       y = 0;
       lives--;
+      bounce = true;
     }
     if (y > sizeY) {
       speedY = -speedY;
       y = sizeY;
       lives--;
+      bounce = true;
+    }
+
+    if (bounce) {
+      // play sound
+      Flame.audio.play('bounce.wav');
     }
 
   }

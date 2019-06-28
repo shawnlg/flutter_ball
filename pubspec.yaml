@@ -15,4 +15,35 @@ dev_dependencies:
     sdk: flutter
 flutter:
   uses-material-design: true
-
+  assets:
+    - assets/audio/bounce.wav
+    - assets/images/drum/bass.jpg
+    - assets/audio/drum/bass.wav
+    - assets/images/drum/bongos.png
+    - assets/audio/drum/bongos.wav
+    - assets/images/drum/castanet.jpg
+    - assets/audio/drum/castanet.wav
+    - assets/images/drum/clap.jpg
+    - assets/audio/drum/clap.wav
+    - assets/images/drum/cowbell.jpg
+    - assets/audio/drum/cowbell.wav
+    - assets/images/drum/cymbols.jpg
+    - assets/audio/drum/cymbols.wav
+    - assets/images/drum/echo.jpg
+    - assets/audio/drum/echo.wav
+    - assets/images/drum/frame drum.jpg
+    - assets/audio/drum/frame drum.wav
+    - assets/images/drum/maracas.jpg
+    - assets/audio/drum/maracas.wav
+    - assets/audio/drum/metro main.wav
+    - assets/audio/drum/metro off.wav
+    - assets/images/drum/open hat.jpg
+    - assets/audio/drum/open hat.wav
+    - assets/images/drum/tambourine.jpg
+    - assets/audio/drum/tambourine.wav
+    - assets/images/drum/triangle.jpg
+    - assets/audio/drum/triangle.wav
+    - assets/images/drum/whistle.jpg
+    - assets/audio/drum/whistle.wav
+    - assets/images/drum/woodblock.jpg
+    - assets/audio/drum/woodblock.wav
