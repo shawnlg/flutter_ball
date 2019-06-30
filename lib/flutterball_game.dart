@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_ball/components/ball_releaser.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
-import 'package:flutter_ball/components/drum.dart';
+import 'package:flutter_ball/components/drum_controller.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
@@ -16,11 +16,11 @@ class FlutterballGame extends BaseGame {
 
   // make a new game
   FlutterballGame() {
-    // make a new drum game component
-    var drum = Drum(this,50,50,100,'drum/frame drum.jpg','drum/frame drum.wav');
+    // make a new drum machine game component
+    var drumMachine = DrumController(this);
 
     // tell the game about this component
-    add(drum);
+    add(drumMachine);
   }
 
   // gesture handlers

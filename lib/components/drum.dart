@@ -12,13 +12,13 @@ class Drum extends SpriteComponent  {
     this.x = x;
     this.y = y;
     hitRect = Rect.fromLTWH(x, y, width, height);
-    Flame.audio.play('bounce.wav');  // play once so it's ready for taps
+    Flame.audio.play(sound);  // play once so it's ready for taps
   }
 
   void update(double t) {
     if (game.wasTapped && hitRect.contains(Offset(game.tapX,game.tapY))) {
       game.wasTapped = false;  // reset tap
-      Flame.audio.play('bounce.wav');
+      Flame.audio.play(sound);
     }
   }
 
