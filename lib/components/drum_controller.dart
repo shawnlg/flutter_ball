@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flame/components/component.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 import 'package:flutter_ball/components/drum.dart';
 
@@ -20,12 +21,36 @@ class DrumController extends Component {
   double pctY=0;  // pixels as a percentage
   State state = State.STARTUP;
   List<Drum> drums;
+  Sprite recordButton = Sprite('drum/record.jpg');
+  Sprite playButton = Sprite('drum/play.jpg');
+  Sprite stopButton = Sprite('drum/stop.jpg');
+  Rect button1Rect;  // where to place the first button
+  Rect button2Rect;  // where to place the second button
 
   // constructor
   DrumController(this.game) : super() {
   }
 
-  void render(Canvas c) => null;
+  void render(Canvas c) {
+    // what we do depends on the state of the drum machine
+    switch (state) {
+      case State.STARTUP:
+        break;
+      case State.READY:
+        break;
+      case State.TAP:  // show the record and play buttons
+        recordButton.renderRect(c, button1Rect);
+        playButton.renderRect(c, button2Rect);
+        break;
+      case State.RECORD:  // show the stop button
+        stopButton.renderRect(c, button2Rect);
+        break;
+      case State.PLAY:  // show the stop button
+        stopButton.renderRect(c, button2Rect);
+        break;
+    }
+
+  }
 
   void update(double t) {
     // what we do depends on the state of the drum machine
@@ -68,6 +93,11 @@ class DrumController extends Component {
     pctX = sizeX/100;
     pctY = sizeY/100;
     state = State.READY;
+
+    // save the button locations
+    button1Rect = Rect.fromLTWH(pctX*10, pctY*80, pctX*20, pctX*20);
+    button2Rect = Rect.fromLTWH(pctX*40, pctY*80, pctX*20, pctX*20);
+
   }
 
 }

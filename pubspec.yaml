@@ -47,3 +47,6 @@ flutter:
     - assets/audio/drum/whistle.wav
     - assets/images/drum/woodblock.jpg
     - assets/audio/drum/woodblock.wav
+    - assets/images/drum/record.jpg
+    - assets/images/drum/play.jpg
+    - assets/images/drum/stop.jpg

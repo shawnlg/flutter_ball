@@ -23,6 +23,9 @@ void main() async {
     'drum/triangle.jpg',
     'drum/whistle.jpg',
     'drum/woodblock.jpg',
+    'drum/record.jpg',
+    'drum/play.jpg',
+    'drum/stop.jpg',
   ]);
 
   Flame.audio.disableLog();
