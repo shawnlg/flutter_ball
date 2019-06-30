@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flame/components/component.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 import 'package:flutter_ball/components/drum.dart';
@@ -12,7 +13,14 @@ enum State {
   PLAY,     // play a recorded drum loop
 }
 
+// constants
+const LOOP_SIZE = 64;
+const BEAT_LENGTH = 0.1;  // seconds for each beat in the loop
+const METRONOME_BEATS = 8;  // tick sound this many beats apart
+const BUTTON_PRESS_SOUND = 'drum/metro main.wav';  // what to play when button is pressed
+
 class DrumController extends Component {
+
   // instance variables
   FlutterballGame game;
   double sizeX=0;  // size of the screen in the x direction
@@ -26,6 +34,9 @@ class DrumController extends Component {
   Sprite stopButton = Sprite('drum/stop.jpg');
   Rect button1Rect;  // where to place the first button
   Rect button2Rect;  // where to place the second button
+  List<String> drumTrack = List(LOOP_SIZE);
+  double loopStartTime;  // when loop started playing
+  int loopBeat;  // which beat of the loop we are in
 
   // constructor
   DrumController(this.game) : super() {
@@ -76,10 +87,38 @@ class DrumController extends Component {
         state = State.TAP;  // play taps
         break;
       case State.TAP:
+        // see if user tapped on record button
+        if (game.wasTapped && button1Rect.contains(Offset(game.tapX,game.tapY))) {
+          game.wasTapped = false;  // reset tap
+          Flame.audio.play(BUTTON_PRESS_SOUND);
+          state = State.RECORD;
+        }
+
+        // see if user tapped on play button
+        if (game.wasTapped && button2Rect.contains(Offset(game.tapX,game.tapY))) {
+          game.wasTapped = false;  // reset tap
+          Flame.audio.play(BUTTON_PRESS_SOUND);
+          state = State.PLAY;
+        }
+
         break;
       case State.RECORD:
+        // see if user tapped on stop button
+        if (game.wasTapped && button2Rect.contains(Offset(game.tapX,game.tapY))) {
+          game.wasTapped = false;  // reset tap
+          Flame.audio.play(BUTTON_PRESS_SOUND);
+          state = State.TAP;
+        }
+
         break;
       case State.PLAY:
+        // see if user tapped on stop button
+        if (game.wasTapped && button2Rect.contains(Offset(game.tapX,game.tapY))) {
+          game.wasTapped = false;  // reset tap
+          Flame.audio.play(BUTTON_PRESS_SOUND);
+          state = State.TAP;
+        }
+
         break;
     }
   }
