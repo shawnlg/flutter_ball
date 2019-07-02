@@ -17,7 +17,7 @@ enum State {
 const LOOP_SIZE = 64;
 const BEAT_LENGTH = 0.1;  // seconds for each beat in the loop
 const METRONOME_BEATS = 8;  // tick sound this many beats apart
-const BUTTON_PRESS_SOUND = 'drum/metro main.wav';  // what to play when button is pressed
+const BUTTON_PRESS_SOUND = 'drum/metro off.wav';  // what to play when button is pressed
 
 class DrumController extends Component {
 
@@ -35,11 +35,40 @@ class DrumController extends Component {
   Rect button1Rect;  // where to place the first button
   Rect button2Rect;  // where to place the second button
   List<String> drumTrack = List(LOOP_SIZE);
-  double loopStartTime;  // when loop started playing
-  int loopBeat;  // which beat of the loop we are in
+  int currentBeat;  // which beat of the loop we are in
+  double timeNextBeat;  // when we have the next beat
+  int metroBeat;  // which beat to play the next metronome tick
 
   // constructor
   DrumController(this.game) : super() {
+    currentBeat = 0;
+    metroBeat = 0;
+    timeNextBeat = game.currentTime() + 1;  // start keeping track of beats soon
+  }
+
+  // called once for every beat
+  void beat() {
+    // play metronome if recording
+    if (state == State.RECORD) {
+      if (currentBeat == metroBeat) {
+        String sound = metroBeat == 0 ? 'drum/metro main.wav' : 'drum/metro off.wav';
+        Flame.audio.play(sound);
+
+        // set next metronome beat
+        metroBeat += METRONOME_BEATS;
+        if (metroBeat >= LOOP_SIZE) {
+          metroBeat = 0;
+        }
+      }
+
+      // increment beat number
+      currentBeat++;
+      if (currentBeat >= LOOP_SIZE) {
+        currentBeat = 0;
+      }
+
+    }
+
   }
 
   void render(Canvas c) {
@@ -92,6 +121,9 @@ class DrumController extends Component {
           game.wasTapped = false;  // reset tap
           Flame.audio.play(BUTTON_PRESS_SOUND);
           state = State.RECORD;
+          currentBeat = 0;  // start recording in 1 second
+          timeNextBeat = game.currentTime() + 1;  // start keeping track of beats soon
+          metroBeat = 0;  // start ticking on first beat of loop
         }
 
         // see if user tapped on play button
@@ -99,6 +131,8 @@ class DrumController extends Component {
           game.wasTapped = false;  // reset tap
           Flame.audio.play(BUTTON_PRESS_SOUND);
           state = State.PLAY;
+          currentBeat = 0;  // start playing in 1 second
+          timeNextBeat = game.currentTime() + 1;  // start keeping track of beats soon
         }
 
         break;
@@ -120,6 +154,12 @@ class DrumController extends Component {
         }
 
         break;
+    }
+
+    // count off the beat
+    if (game.currentTime() > timeNextBeat) {
+      timeNextBeat += BEAT_LENGTH;
+      beat();
     }
   }
 
