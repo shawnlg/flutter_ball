@@ -14,9 +14,9 @@ enum State {
 }
 
 // constants
-const LOOP_SIZE = 64;
-const BEAT_LENGTH = 0.1;  // seconds for each beat in the loop
-const METRONOME_BEATS = 8;  // tick sound this many beats apart
+const LOOP_SIZE = 32;
+const BEAT_LENGTH = 0.2;  // seconds for each beat in the loop
+const METRONOME_BEATS = 4;  // tick sound this many beats apart
 const BUTTON_PRESS_SOUND = 'drum/metro off.wav';  // what to play when button is pressed
 
 class DrumController extends Component {
@@ -61,12 +61,21 @@ class DrumController extends Component {
         }
       }
 
-      // increment beat number
-      currentBeat++;
-      if (currentBeat >= LOOP_SIZE) {
-        currentBeat = 0;
+      // play any sound recorded
+      if (drumTrack[currentBeat] != null) {
+        Flame.audio.play(drumTrack[currentBeat]);
       }
+    } else if (state == State.PLAY) {
+      // play any sound recorded
+      if (drumTrack[currentBeat] != null) {
+        Flame.audio.play(drumTrack[currentBeat]);
+      }
+    } // state
 
+    // increment beat number
+    currentBeat++;
+    if (currentBeat >= LOOP_SIZE) {
+      currentBeat = 0;
     }
 
   }
@@ -100,15 +109,15 @@ class DrumController extends Component {
       case State.READY:
         // create the drums
         drums = [
-          Drum(game,pctX*10, pctY*10, pctX*20, 'drum/frame drum.jpg', 'drum/frame drum.wav'),
-          Drum(game,pctX*40, pctY*10, pctX*20, 'drum/cymbols.jpg', 'drum/cymbols.wav'),
-          Drum(game,pctX*70, pctY*10, pctX*20, 'drum/echo.jpg', 'drum/echo.wav'),
-          Drum(game,pctX*10, pctY*30, pctX*20, 'drum/woodblock.jpg', 'drum/woodblock.wav'),
-          Drum(game,pctX*40, pctY*30, pctX*20, 'drum/maracas.jpg', 'drum/maracas.wav'),
-          Drum(game,pctX*70, pctY*30, pctX*20, 'drum/open hat.jpg', 'drum/open hat.wav'),
-          Drum(game,pctX*10, pctY*50, pctX*20, 'drum/tambourine.jpg', 'drum/tambourine.wav'),
-          Drum(game,pctX*40, pctY*50, pctX*20, 'drum/triangle.jpg', 'drum/triangle.wav'),
-          Drum(game,pctX*70, pctY*50, pctX*20, 'drum/whistle.jpg', 'drum/whistle.wav'),
+          Drum(game,this,pctX*10, pctY*10, pctX*20, 'drum/frame drum.jpg', 'drum/frame drum.wav'),
+          Drum(game,this,pctX*40, pctY*10, pctX*20, 'drum/cymbols.jpg', 'drum/cymbols.wav'),
+          Drum(game,this,pctX*70, pctY*10, pctX*20, 'drum/echo.jpg', 'drum/echo.wav'),
+          Drum(game,this,pctX*10, pctY*30, pctX*20, 'drum/woodblock.jpg', 'drum/woodblock.wav'),
+          Drum(game,this,pctX*40, pctY*30, pctX*20, 'drum/maracas.jpg', 'drum/maracas.wav'),
+          Drum(game,this,pctX*70, pctY*30, pctX*20, 'drum/open hat.jpg', 'drum/open hat.wav'),
+          Drum(game,this,pctX*10, pctY*50, pctX*20, 'drum/tambourine.jpg', 'drum/tambourine.wav'),
+          Drum(game,this,pctX*40, pctY*50, pctX*20, 'drum/triangle.jpg', 'drum/triangle.wav'),
+          Drum(game,this,pctX*70, pctY*50, pctX*20, 'drum/whistle.jpg', 'drum/whistle.wav'),
         ];
 
         // add them to the game
@@ -124,6 +133,7 @@ class DrumController extends Component {
           currentBeat = 0;  // start recording in 1 second
           timeNextBeat = game.currentTime() + 1;  // start keeping track of beats soon
           metroBeat = 0;  // start ticking on first beat of loop
+          drumTrack = List(LOOP_SIZE);  // clear out loop track
         }
 
         // see if user tapped on play button
