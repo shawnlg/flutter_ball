@@ -1,9 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_ball/components/ball_releaser.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
-import 'package:flutter_ball/components/drum_controller.dart';
+import 'package:flutter_ball/components/block.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
@@ -16,11 +17,11 @@ class FlutterballGame extends BaseGame {
 
   // make a new game
   FlutterballGame() {
-    // make a new drum machine game component
-    var drumMachine = DrumController(this);
+    // make a new block game component
+    var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50));
 
     // tell the game about this component
-    add(drumMachine);
+    add(block);
   }
 
   // gesture handlers

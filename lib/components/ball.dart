@@ -9,7 +9,7 @@ class Ball extends Component {
   double speedScaleX;  // how many times screen width the x speed will be
   double speedScaleY;  // how many times screen width the y speed will be
   double x;  // the x location of the ball
-  double y;  // the y location of the
+  double y;  // the y location of the ball
   double speedX=0;  // speed in the x direction
   double speedY=0;  // speed in the y direction
   double sizeX=0;  // size of the screen in the x direction

@@ -23,7 +23,7 @@ class Drum extends SpriteComponent  {
       game.wasTapped = false;  // reset tap
       Flame.audio.play(sound);
       if (controller.state == State.RECORD) {
-        // add this sound to the loop track
+        // add this sound to the loop track.  Needs to be on the previous beat
         int beat = controller.currentBeat - 1;
         if (beat < 0) beat = LOOP_SIZE - 1;
         controller.drumTrack[beat] = sound;

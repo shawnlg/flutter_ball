@@ -4,6 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 import 'package:flutter_ball/components/drum.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 enum State {
   STARTUP,  // game is starting up, no size yet
