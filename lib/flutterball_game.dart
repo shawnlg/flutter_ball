@@ -19,9 +19,12 @@ class FlutterballGame extends BaseGame {
   FlutterballGame() {
     // make a new block game component
     var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50));
+    var block2 = Block(this, position: Rect.fromLTWH(200, 400, 50, 50));
 
     // tell the game about this component
     add(block);
+    add(block2);
+    Block.canDrag = true;  // ok to drag blocks
   }
 
   // gesture handlers
