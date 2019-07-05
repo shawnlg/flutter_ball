@@ -30,7 +30,6 @@ class Ball extends Component {
     ballSize = size;
     speedScaleX = speedX;
     speedScaleY = speedY;
-    print("Ball x=$x y=$y size=$size speedX=$speedX speedY=$speedY");
   }
 
   // the game engine will tell you what the screen size is
@@ -105,8 +104,8 @@ class Ball extends Component {
           block.lives--;
 
           // see if we are closes to an x side of the block (left, right) or a y side (top, buttom)
-          double closestX = min(((x - block.position.topLeft.dx).abs()), (x - block.position.topRight.dx).abs());
-          double closestY = min(((y - block.position.topLeft.dy).abs()), (y - block.position.bottomLeft.dx).abs());
+          double closestX = min(x - block.position.topLeft.dx, block.position.topRight.dx - x);
+          double closestY = min(y - block.position.topLeft.dy, block.position.bottomLeft.dy - y);
           if (closestX < closestY) {
             // we are closest to the left/right of the block, so we hit a vertical edge
             speedX = -speedX;  // reverse x direction
