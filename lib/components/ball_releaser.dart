@@ -52,7 +52,7 @@ class BallReleaser extends Component {
         color = Colors.purple;
         break;
     }
-    var ball = Ball(color: color, size: size, speedX: speedX, speedY: speedY, style: style);
+    var ball = Ball(game, color: color, size: size, speedX: speedX, speedY: speedY, style: style);
 
     // tell the game about this component
     game.add(ball);

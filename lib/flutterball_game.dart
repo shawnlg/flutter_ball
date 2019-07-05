@@ -5,6 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flutter_ball/components/ball_releaser.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/block.dart';
+import 'package:flutter_ball/components/ball.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
@@ -20,11 +21,13 @@ class FlutterballGame extends BaseGame {
     // make new block game components
     var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50));
     var block2 = Block(this, position: Rect.fromLTWH(200, 400, 50, 50));
+    var ball = Ball(this, x: 0,y: 50, speedX: 0.3, speedY: 0.1, );
 
     // tell the game about this component
     add(block);
     add(block2);
     Block.canDrag = true;  // ok to drag blocks
+    add(ball);
   }
 
   // gesture handlers

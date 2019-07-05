@@ -41,7 +41,7 @@ class InteractiveBallReleaser extends Component {
       // launch ball
       double speedX = (lineEnd.dx - lineStart.dx) / sizeX;
       double speedY = (lineEnd.dy - lineStart.dy) / sizeY;
-      Ball ball = Ball(x:lineStart.dx, y:lineStart.dy, speedX: speedX, speedY: speedY);
+      Ball ball = Ball(game, x:lineStart.dx, y:lineStart.dy, speedX: speedX, speedY: speedY);
       game.add(ball);
     } else {
       // user is still dragging and we are still making a line
