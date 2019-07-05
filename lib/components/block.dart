@@ -54,11 +54,11 @@ class Block extends Component {
     if (canDrag && game.isDragging) { // user currently dragging
       if (dragState == DragState.NOT_DRAGGING) {
         // nothing is being dragged yet, so it might be this block
+        dragX = game.dragX; // record where dragging started
+        dragY = game.dragY;
         if (position.contains(Offset(dragX,dragY))) {
           // we are being dragged
           dragState = DragState.DRAGGING_ME;
-          dragX = game.dragX; // record where dragging started
-          dragY = game.dragY;
         } else {
           // something else being dragged
           dragState = DragState.DRAGGING_OTHER;
