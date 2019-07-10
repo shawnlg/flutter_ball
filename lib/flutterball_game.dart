@@ -19,15 +19,16 @@ class FlutterballGame extends BaseGame {
   // make a new game
   FlutterballGame() {
     // make new block game components
-    var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50));
-    var block2 = Block(this, position: Rect.fromLTWH(200, 400, 50, 50));
-    var ball = Ball(this, x: 0,y: 50, speedX: 0.3, speedY: 0.1, );
+    var block = Block(this, position: Rect.fromLTWH(30, 200, 300, 250),
+        displayText: "This\nis\na\ntest", color: Colors.black, borderColor: Colors.blue,
+        textStyle: TextStyle(fontSize: 20),
+    );
 
     // tell the game about this component
-    add(block);
-    add(block2);
-    Block.canDrag = true;  // ok to drag blocks
-    add(ball);
+//    add(block);
+    Block.canDrag = true;  // ok to drag
+    BallReleaser br = BallReleaser(this);
+    add(br);
   }
 
   // gesture handlers
