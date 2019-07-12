@@ -6,6 +6,7 @@ import 'package:flutter_ball/components/ball_releaser.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
+import 'package:flutter_ball/components/game_intro.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
@@ -27,8 +28,8 @@ class FlutterballGame extends BaseGame {
     // tell the game about this component
 //    add(block);
     Block.canDrag = true;  // ok to drag
-    BallReleaser br = BallReleaser(this);
-    add(br);
+    GameIntro intro = GameIntro(this);
+    add(intro);
   }
 
   // gesture handlers

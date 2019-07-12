@@ -21,9 +21,10 @@ class Ball extends Component {
   double sizeY=0;  // size of the screen in the y direction
   int lives = 10;  // how many bounces until the ball dies
   Paint paint = Paint();  // paint the ball circle
+  final bool sound; // if bounce sound
 
   // create a ball
-  Ball(this.game, {this.x=0, this.y=0, this.lives=100, Color color=Colors.white, double size=10, double speedX=1, double speedY=1, PaintingStyle style = PaintingStyle.stroke}) : super() {
+  Ball(this.game, {this.x=0, this.y=0, this.sound=true, this.lives=100, Color color=Colors.white, double size=10, double speedX=1, double speedY=1, PaintingStyle style = PaintingStyle.stroke}) : super() {
     paint.color = color;
     paint.strokeWidth = 1;
     paint.style = style;
@@ -60,7 +61,7 @@ class Ball extends Component {
 
     if (screenBounce() || blockBounce(t)) {
       // play sound
-      Flame.audio.play('bounce.wav');
+      if (sound) Flame.audio.play('bounce.wav');
       lives--;  // lost a life after a bounce
     }
 
@@ -98,7 +99,7 @@ class Ball extends Component {
       if (component is Block) {
         Block block = component;  // reference this component as a block
 
-        if (block.position.contains(Offset(x,y))) {
+        if (block.bounce && block.position.contains(Offset(x,y))) {
           // ball is inside this block, so we bounced
           bounced = true;
           block.lives--;

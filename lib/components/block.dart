@@ -32,6 +32,7 @@ class Block extends Component {
     textDirection: TextDirection.ltr,
     textScaleFactor: 1.5,
   );
+  final double topMargin;
 
   // handle block dragging
   DragState dragState = DragState.NOT_DRAGGING;  // user not dragging
@@ -41,15 +42,23 @@ class Block extends Component {
   // create a block
   Block(this.game, {this.position, this.lives=10, this.displayText=null,
         Color color=Colors.white, Color borderColor=Colors.white,
-        this.textStyle,
+        this.textStyle, this.topMargin = 10,
         this.bounce=true,
         double borderThickness=1, this.draggable=true,
     }) : super() {
-    paint.color = color;
-    paint.style = PaintingStyle.fill;
-    border.color = borderColor;
-    border.style = PaintingStyle.stroke;
-    border.strokeWidth = borderThickness;
+    if (color == null) {
+      paint = null;
+    } else {
+      paint.color = color;
+      paint.style = PaintingStyle.fill;
+    }
+    if (borderColor == null) {
+      border = null;
+    } else {
+      border.color = borderColor;
+      border.style = PaintingStyle.stroke;
+      border.strokeWidth = borderThickness;
+    }
   }
 
   void resize(Size size) {
@@ -57,11 +66,9 @@ class Block extends Component {
 
   void render(Canvas c) {
     // draw the block, the border, and then the text on top
-    c.drawRect(position, paint);
-    c.drawRect(position, border);
-    if (displayText != null) {
-      tp.paint(c, position.translate(0, 10).topLeft);
-    }
+    if (paint != null) c.drawRect(position, paint);
+    if (border != null) c.drawRect(position, border);
+    if (displayText != null) tp.paint(c, position.translate(0, topMargin).topLeft);
   }
 
   void update(double t) {
