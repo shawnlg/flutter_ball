@@ -28,7 +28,6 @@ class Block extends Component {
   TextStyle textStyle = TextStyle(color: Colors.white);  // how to display text
   TextSpan textSpan;  // used to paint text
   TextPainter tp = TextPainter(
-    textAlign: TextAlign.center,
     textDirection: TextDirection.ltr,
     textScaleFactor: 1.5,
   );
@@ -43,8 +42,9 @@ class Block extends Component {
   Block(this.game, {this.position, this.lives=10, this.displayText=null,
         Color color=Colors.white, Color borderColor=Colors.white,
         this.textStyle, this.topMargin = 10,
-        this.bounce=true,
-        double borderThickness=1, this.draggable=true,
+        this.bounce=true, TextAlign textAlign=TextAlign.center,
+
+    double borderThickness=1, this.draggable=true,
     }) : super() {
     if (color == null) {
       paint = null;
@@ -59,6 +59,8 @@ class Block extends Component {
       border.style = PaintingStyle.stroke;
       border.strokeWidth = borderThickness;
     }
+    tp.textAlign = textAlign;
+
   }
 
   void resize(Size size) {
@@ -72,6 +74,9 @@ class Block extends Component {
   }
 
   void update(double t) {
+    // if block is for bouncing, set display text as number of lives
+    if (bounce) displayText = lives.toString();
+
     // see if we have to update the text being displayed
     if (displayText != null && displayText != previousText) {
       textSpan = TextSpan(text: displayText, style: textStyle);

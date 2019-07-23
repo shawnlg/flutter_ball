@@ -10,6 +10,9 @@ import 'package:flutter_ball/components/game_intro.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
+  int level=1;  // level we are on
+
+  // handle gestures
   bool isDragging = false;  // true when user is dragging across the screen
   double dragX;   // x coordinate uf oser's finger
   double dragY;   // x coordinate uf oser's finger
@@ -32,6 +35,20 @@ class FlutterballGame extends BaseGame {
     add(intro);
   }
 
+  // remove all ball and block components from the game
+  void clearComponents() {
+    components.forEach((c) {
+      if (c is Block) {
+        Block block = c;
+        block.lives = 0;
+      } else if (c is Ball) {
+        Ball ball = c;
+        ball.lives = 0;
+      }
+    });
+  }
+
+
   // gesture handlers
   void onDragStart(DragStartDetails d) {
     isDragging = true;
@@ -52,6 +69,10 @@ class FlutterballGame extends BaseGame {
     tapX = d.globalPosition.dx;
     tapY = d.globalPosition.dy;
     wasTapped = true;
+  }
+
+  void cancelDrag() {
+    isDragging = false;
   }
 
 }
