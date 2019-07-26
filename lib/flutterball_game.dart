@@ -4,7 +4,7 @@ import 'package:flutter_ball/components/ball.dart';
 class FlutterballGame extends BaseGame {
 
   // make a new game
-  FlutterballGame() {
+  FlutterballGame() : super() {
     // make a new ball game component
     var ball = Ball();
 

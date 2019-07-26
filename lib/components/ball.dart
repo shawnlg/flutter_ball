@@ -10,14 +10,11 @@ class Ball extends Component {
   double height;  // height of screen
   double speedX;  // speed in the x direction
   double speedY;  // speed in the y direction
-  double sizeX;  // size of the screen in the x direction
-  double sizeY;  // size of the screen in the y direction
   int lives = 10;  // how many bounces until the ball dies
   Paint paint = Paint();  // paint the ball circle
 
   // create a ball
   Ball() : super() {
-    print("new Ball");
     paint.color = Colors.green;
     paint.strokeWidth = 1;
     paint.style = PaintingStyle.stroke;
@@ -25,7 +22,6 @@ class Ball extends Component {
 
   // the game engine will tell you what the screen size is
   void resize(Size size) {
-    print("ball.resize: size = $size");
     // save screen width and height
     width = size.width;
     height = size.height;
@@ -48,22 +44,22 @@ class Ball extends Component {
     y += t*speedY;
 
     // change direction if ball crosses edge
-    if (x < 0) {
+    if (x < 0) { // hit the left edge
       speedX = -speedX;
       x = 0;
       lives--;
     }
-    if (x > width) {
+    if (x > width) { // hit the right edge
       speedX = -speedX;
       x = width;
       lives--;
     }
-    if (y < 0) {
+    if (y < 0) { // hit the top edge
       speedY = -speedY;
       y = 0;
       lives--;
     }
-    if (y > height) {
+    if (y > height) { // hit the bottom edge
       speedY = -speedY;
       y = height;
       lives--;
