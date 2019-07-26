@@ -19,18 +19,16 @@ class BallReleaser extends Component {
   void render(Canvas c) => null;
 
   void update(double t) {
-    if (game.currentTime() < timeOfNextBall) {
-      return;  // not time to make a new ball yet
+    if (game.currentTime() > timeOfNextBall) {
+      // make a new ball game component
+      var ball = Ball(color: Colors.blue, size: 20.0, speed: 0.5, style: PaintingStyle.fill);
+
+      // tell the game about this component
+      game.add(ball);
+
+      lives--;  // one less ball to add
+      timeOfNextBall++;  // next ball one second from now
     }
-
-    // make a new ball game component
-    var ball = Ball(color: Colors.blue, size: 20, speed: 0.5, style: PaintingStyle.fill);
-
-    // tell the game about this component
-    game.add(ball);
-
-    lives--;  // one less ball to add
-    timeOfNextBall++;  // next ball one second from now
 
   }
 
