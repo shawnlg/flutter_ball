@@ -40,7 +40,6 @@ void main() async {
     'drum/triangle.wav',
     'drum/whistle.wav',
     'drum/woodblock.wav',
-
   ]);
 
   // define gestures the game can handle
