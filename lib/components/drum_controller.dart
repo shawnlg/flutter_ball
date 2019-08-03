@@ -15,8 +15,8 @@ enum State {
 class DrumController extends Component {
   // instance variables
   FlutterballGame game;
-  double sizeX=0;  // size of the screen in the x direction
-  double sizeY=0;  // size of the screen in the y direction
+  double width=0;  // size of the screen in the x direction
+  double height=0;  // size of the screen in the y direction
   double pctX=0;  // pixels as a percentage
   double pctY=0;  // pixels as a percentage
   State state = State.STARTUP;
@@ -34,10 +34,6 @@ class DrumController extends Component {
   void render(Canvas c) {
     // what we do depends on the state of the drum machine
     switch (state) {
-      case State.STARTUP:
-        break;
-      case State.READY:
-        break;
       case State.TAP:  // show the record and play buttons
         recordButton.renderRect(c, button1Rect);
         playButton.renderRect(c, button2Rect);
@@ -48,15 +44,13 @@ class DrumController extends Component {
       case State.PLAY:  // show the stop button
         stopButton.renderRect(c, button2Rect);
         break;
+      default:
     }
-
   }
 
   void update(double t) {
     // what we do depends on the state of the drum machine
     switch (state) {
-      case State.STARTUP:
-        break;
       case State.READY:
         // create the drums
         drums = [
@@ -75,12 +69,7 @@ class DrumController extends Component {
         drums.forEach((drum) => game.add(drum));
         state = State.TAP;  // play taps
         break;
-      case State.TAP:
-        break;
-      case State.RECORD:
-        break;
-      case State.PLAY:
-        break;
+      default:
     }
   }
 
@@ -88,10 +77,10 @@ class DrumController extends Component {
     if (size.width == 0) return;  // don't bother
 
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
-    pctX = sizeX/100;
-    pctY = sizeY/100;
+    width = size.width;
+    height = size.height;
+    pctX = width/100;
+    pctY = height/100;
     state = State.READY;
 
     // save the button locations
