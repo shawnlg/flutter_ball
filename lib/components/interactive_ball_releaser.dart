@@ -11,8 +11,8 @@ class InteractiveBallReleaser extends Component {
   Offset lineStart;
   Offset lineEnd;
   Paint paint = Paint();  // paint the line
-  double sizeX;  // width of screen
-  double sizeY;  // height of screen
+  double width;  // width of screen
+  double height;  // height of screen
 
   // create the component
   InteractiveBallReleaser(this.game) : super() {
@@ -39,8 +39,8 @@ class InteractiveBallReleaser extends Component {
       // user no longer dragging but we are still making the line
       makingLine = false;  // stop making the line
       // launch ball
-      double speedX = (lineEnd.dx - lineStart.dx) / sizeX;
-      double speedY = (lineEnd.dy - lineStart.dy) / sizeY;
+      double speedX = (lineEnd.dx - lineStart.dx) / width;
+      double speedY = (lineEnd.dy - lineStart.dy) / height;
       Ball ball = Ball(x:lineStart.dx, y:lineStart.dy, speedX: speedX, speedY: speedY);
       game.add(ball);
     } else {
@@ -53,8 +53,8 @@ class InteractiveBallReleaser extends Component {
   // the game engine will tell you what the screen size is
   void resize(Size size) {
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
+    width = size.width;
+    height = size.height;
   }
 
 
