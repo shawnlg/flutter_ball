@@ -14,17 +14,19 @@ enum State {
 }
 
 // constants
-const LOOP_SIZE = 32;
-const BEAT_LENGTH = 0.2;  // seconds for each beat in the loop
-const METRONOME_BEATS = 4;  // tick sound this many beats apart
+const LOOP_SIZE = 64;
+const BEAT_LENGTH = 0.1;  // seconds for each beat in the loop
+const METRONOME_BEATS = 8;  // tick sound this many beats apart
+const METRONOME_LOUD_SOUND = 'drum/metro main.wav';
+const METRONOME_SOFT_SOUND = 'drum/metro off.wav';
 const BUTTON_PRESS_SOUND = 'drum/metro off.wav';  // what to play when button is pressed
 
 class DrumController extends Component {
 
   // instance variables
   FlutterballGame game;
-  double sizeX=0;  // size of the screen in the x direction
-  double sizeY=0;  // size of the screen in the y direction
+  double width=0;  // size of the screen in the x direction
+  double height=0;  // size of the screen in the y direction
   double pctX=0;  // pixels as a percentage
   double pctY=0;  // pixels as a percentage
   State state = State.STARTUP;
@@ -51,7 +53,7 @@ class DrumController extends Component {
     // play metronome if recording
     if (state == State.RECORD) {
       if (currentBeat == metroBeat) {
-        String sound = metroBeat == 0 ? 'drum/metro main.wav' : 'drum/metro off.wav';
+        String sound = metroBeat == 0 ? METRONOME_LOUD_SOUND : METRONOME_SOFT_SOUND;
         Flame.audio.play(sound);
 
         // set next metronome beat
@@ -80,13 +82,19 @@ class DrumController extends Component {
 
   }
 
+  // called by a drum when it is tapped
+  void drumTap(Drum drum) {
+    if (state == State.RECORD) {
+      // add this sound to the loop track
+      int beat = currentBeat - 1;
+      if (beat < 0) beat = LOOP_SIZE - 1;
+      drumTrack[beat] = drum.sound;
+    }
+  }
+
   void render(Canvas c) {
     // what we do depends on the state of the drum machine
     switch (state) {
-      case State.STARTUP:
-        break;
-      case State.READY:
-        break;
       case State.TAP:  // show the record and play buttons
         recordButton.renderRect(c, button1Rect);
         playButton.renderRect(c, button2Rect);
@@ -97,6 +105,7 @@ class DrumController extends Component {
       case State.PLAY:  // show the stop button
         stopButton.renderRect(c, button2Rect);
         break;
+      default:
     }
 
   }
@@ -104,20 +113,18 @@ class DrumController extends Component {
   void update(double t) {
     // what we do depends on the state of the drum machine
     switch (state) {
-      case State.STARTUP:
-        break;
       case State.READY:
         // create the drums
         drums = [
-          Drum(game,this,pctX*10, pctY*10, pctX*20, 'drum/frame drum.jpg', 'drum/frame drum.wav'),
-          Drum(game,this,pctX*40, pctY*10, pctX*20, 'drum/cymbols.jpg', 'drum/cymbols.wav'),
-          Drum(game,this,pctX*70, pctY*10, pctX*20, 'drum/echo.jpg', 'drum/echo.wav'),
-          Drum(game,this,pctX*10, pctY*30, pctX*20, 'drum/woodblock.jpg', 'drum/woodblock.wav'),
-          Drum(game,this,pctX*40, pctY*30, pctX*20, 'drum/maracas.jpg', 'drum/maracas.wav'),
-          Drum(game,this,pctX*70, pctY*30, pctX*20, 'drum/open hat.jpg', 'drum/open hat.wav'),
-          Drum(game,this,pctX*10, pctY*50, pctX*20, 'drum/tambourine.jpg', 'drum/tambourine.wav'),
-          Drum(game,this,pctX*40, pctY*50, pctX*20, 'drum/triangle.jpg', 'drum/triangle.wav'),
-          Drum(game,this,pctX*70, pctY*50, pctX*20, 'drum/whistle.jpg', 'drum/whistle.wav'),
+          Drum(game, this, pctX*10, pctY*10, pctX*20, 'drum/frame drum.jpg', 'drum/frame drum.wav'),
+          Drum(game, this, pctX*40, pctY*10, pctX*20, 'drum/cymbols.jpg', 'drum/cymbols.wav'),
+          Drum(game, this, pctX*70, pctY*10, pctX*20, 'drum/echo.jpg', 'drum/echo.wav'),
+          Drum(game, this, pctX*10, pctY*30, pctX*20, 'drum/woodblock.jpg', 'drum/woodblock.wav'),
+          Drum(game, this, pctX*40, pctY*30, pctX*20, 'drum/maracas.jpg', 'drum/maracas.wav'),
+          Drum(game, this, pctX*70, pctY*30, pctX*20, 'drum/open hat.jpg', 'drum/open hat.wav'),
+          Drum(game, this, pctX*10, pctY*50, pctX*20, 'drum/tambourine.jpg', 'drum/tambourine.wav'),
+          Drum(game, this, pctX*40, pctY*50, pctX*20, 'drum/triangle.jpg', 'drum/triangle.wav'),
+          Drum(game, this, pctX*70, pctY*50, pctX*20, 'drum/whistle.jpg', 'drum/whistle.wav'),
         ];
 
         // add them to the game
@@ -130,8 +137,8 @@ class DrumController extends Component {
           game.wasTapped = false;  // reset tap
           Flame.audio.play(BUTTON_PRESS_SOUND);
           state = State.RECORD;
-          currentBeat = 0;  // start recording in 1 second
-          timeNextBeat = game.currentTime() + 1;  // start keeping track of beats soon
+          currentBeat = 0;  // start of pattern
+          timeNextBeat = game.currentTime() + 1;  // start first beat soon
           metroBeat = 0;  // start ticking on first beat of loop
           drumTrack = List(LOOP_SIZE);  // clear out loop track
         }
@@ -141,8 +148,8 @@ class DrumController extends Component {
           game.wasTapped = false;  // reset tap
           Flame.audio.play(BUTTON_PRESS_SOUND);
           state = State.PLAY;
-          currentBeat = 0;  // start playing in 1 second
-          timeNextBeat = game.currentTime() + 1;  // start keeping track of beats soon
+          currentBeat = 0;  // start of pattern
+          timeNextBeat = game.currentTime() + 1;  // start playing soon
         }
 
         break;
@@ -164,6 +171,7 @@ class DrumController extends Component {
         }
 
         break;
+      default:
     }
 
     // count off the beat
@@ -177,10 +185,10 @@ class DrumController extends Component {
     if (size.width == 0) return;  // don't bother
 
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
-    pctX = sizeX/100;
-    pctY = sizeY/100;
+    width = size.width;
+    height = size.height;
+    pctX = width/100;
+    pctY = height/100;
     state = State.READY;
 
     // save the button locations
