@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flame/components/component.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 
-
 class Block extends Component {
 
   // instance variables
   final FlutterballGame game;
-  int lives = 10;  // how many hits until the block dies
+  int lives;  // how many hits until the block dies
   Paint paint = Paint();  // paint the rectangle
   Rect position;  // position of block
   // show lives inside block
@@ -19,13 +18,12 @@ class Block extends Component {
   );
 
   // create a block
-  Block(this.game, {this.position, Color color=Colors.white, }) : super() {
+  Block(this.game, {this.position, Color color=Colors.white, this.lives=10,}) : super() {
     paint.color = color;
     paint.style = PaintingStyle.fill;
-
   }
 
-    void resize(Size size) {
+  void resize(Size size) {
   }
 
   void render(Canvas c) {
