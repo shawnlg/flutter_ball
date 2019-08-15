@@ -17,6 +17,7 @@ class FlutterballGame extends BaseGame {
   FlutterballGame() {
     // make a new block game component
     var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50));
+    block.lives = 4;
 
     // tell the game about this component
     add(block);
