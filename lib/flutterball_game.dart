@@ -2,8 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_ball/components/ball_releaser.dart';
-import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/block.dart';
 
 class FlutterballGame extends BaseGame {
@@ -17,11 +15,11 @@ class FlutterballGame extends BaseGame {
 
   // make a new game
   FlutterballGame() {
-    // make a new block game component
-    var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50));
-    var block2 = Block(this, position: Rect.fromLTWH(200, 400, 50, 50));
+    // make new block game components
+    var block = Block(this, position: Rect.fromLTWH(100, 200, 50, 50), draggableBlock: true);
+    var block2 = Block(this, position: Rect.fromLTWH(200, 400, 50, 50), draggableBlock: false);
 
-    // tell the game about this component
+    // tell the game about the blocks
     add(block);
     add(block2);
     Block.canDrag = true;  // ok to drag blocks

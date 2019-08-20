@@ -15,7 +15,7 @@ class Block extends Component {
 
   // instance variables
   final FlutterballGame game;
-  int lives = 10;  // how many hits until the block dies
+  int _lives;  // how many hits until the block dies
   Paint paint = Paint();  // paint the rectangle
   Rect position;  // position of block
   // show lives inside block
@@ -24,16 +24,29 @@ class Block extends Component {
     textDirection: TextDirection.ltr,
     textScaleFactor: 1.5,
   );
+  
   // handle block dragging
   DragState dragState = DragState.NOT_DRAGGING;  // user not dragging
   double dragX;   // x coordinate uf oser's finger
   double dragY;   // y coordinate uf oser's finger
+  final bool draggableBlock;  // if this block can be dragged
 
   // create a block
-  Block(this.game, {this.position, Color color=Colors.white, }) : super() {
+  Block(this.game, {this.position, Color color=Colors.white, lives=10,
+        this.draggableBlock = false,}) : super() {
     paint.color = color;
     paint.style = PaintingStyle.fill;
+    this.lives = lives;
   }
+
+  void set lives (int l) {
+    _lives = l;
+    TextSpan span = TextSpan(text: _lives.toString(), style: TextStyle(color: Colors.black));
+    tp.text = span;  // text to draw
+    tp.layout(minWidth: position.width, );
+  }
+
+  int get lives => _lives;
 
   void resize(Size size) {
   }
@@ -45,13 +58,8 @@ class Block extends Component {
   }
 
   void update(double t) {
-    // update the lives text on the block
-    TextSpan span = TextSpan(text: lives.toString(), style: TextStyle(color: Colors.black));
-    tp.text = span;  // text to draw
-    tp.layout(minWidth: position.width, );
-
     // update position if being dragged
-    if (canDrag && game.isDragging) { // user currently dragging
+    if (canDrag && draggableBlock && game.isDragging) { // user currently dragging
       if (dragState == DragState.NOT_DRAGGING) {
         // nothing is being dragged yet, so it might be this block
         dragX = game.dragX; // record where dragging started
