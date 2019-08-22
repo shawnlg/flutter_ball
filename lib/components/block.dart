@@ -15,73 +15,43 @@ class Block extends Component {
 
   // instance variables
   final FlutterballGame game;
-  final bool draggable;  // if this block can be dragged
-  final bool bounce;  // true if ball can bounce off of this block
-  int lives;  // how many hits until the block dies
+  int lives = 10;  // how many hits until the block dies
   Paint paint = Paint();  // paint the rectangle
-  Paint border = Paint();  // paint the border
   Rect position;  // position of block
-
-  // show text inside block
-  String displayText;  // what to display
-  String previousText;  // to detect if text changes
-  TextStyle textStyle = TextStyle(color: Colors.white);  // how to display text
-  TextSpan textSpan;  // used to paint text
+  // show lives inside block
   TextPainter tp = TextPainter(
     textAlign: TextAlign.center,
     textDirection: TextDirection.ltr,
     textScaleFactor: 1.5,
   );
-  final double topMargin;
-
   // handle block dragging
   DragState dragState = DragState.NOT_DRAGGING;  // user not dragging
   double dragX;   // x coordinate uf oser's finger
   double dragY;   // y coordinate uf oser's finger
 
   // create a block
-  Block(this.game, {this.position, this.lives=10, this.displayText=null,
-        Color color=Colors.white, Color borderColor=Colors.white,
-        this.textStyle, this.topMargin = 10,
-        this.bounce=true,
-        double borderThickness=1, this.draggable=true,
-    }) : super() {
-    if (color == null) {
-      paint = null;
-    } else {
-      paint.color = color;
-      paint.style = PaintingStyle.fill;
-    }
-    if (borderColor == null) {
-      border = null;
-    } else {
-      border.color = borderColor;
-      border.style = PaintingStyle.stroke;
-      border.strokeWidth = borderThickness;
-    }
+  Block(this.game, {this.position, Color color=Colors.white, }) : super() {
+    paint.color = color;
+    paint.style = PaintingStyle.fill;
   }
 
   void resize(Size size) {
   }
 
   void render(Canvas c) {
-    // draw the block, the border, and then the text on top
-    if (paint != null) c.drawRect(position, paint);
-    if (border != null) c.drawRect(position, border);
-    if (displayText != null) tp.paint(c, position.translate(0, topMargin).topLeft);
+    // draw the block and then the text on top
+    c.drawRect(position, paint);
+    tp.paint(c, position.translate(0, 10).topLeft);
   }
 
   void update(double t) {
-    // see if we have to update the text being displayed
-    if (displayText != null && displayText != previousText) {
-      textSpan = TextSpan(text: displayText, style: textStyle);
-      tp.text = textSpan;  // text to draw
-      tp.layout(minWidth: position.width, );
-      previousText = displayText;  // only update once
-    }
+    // update the lives text on the block
+    TextSpan span = TextSpan(text: lives.toString(), style: TextStyle(color: Colors.black));
+    tp.text = span;  // text to draw
+    tp.layout(minWidth: position.width, );
 
     // update position if being dragged
-    if (draggable && canDrag && game.isDragging) { // user currently dragging
+    if (canDrag && game.isDragging) { // user currently dragging
       if (dragState == DragState.NOT_DRAGGING) {
         // nothing is being dragged yet, so it might be this block
         dragX = game.dragX; // record where dragging started
