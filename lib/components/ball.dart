@@ -1,4 +1,4 @@
-import 'dart:ui';
+fyuiut8yo. timport 'dart:ui';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flame/components/component.dart';
@@ -143,7 +143,6 @@ class Ball extends Component {
     double closestX = min(x - block.position.left, block.position.right - x);
     double closestY = min(y - block.position.top, block.position.bottom - y);
     double totalSpeed = speedX.abs() + speedY.abs();  // we divide up the speed by how the block is hit
-    //print("aimBounce speeX=$speedX, speedY=$speedY, totalSpeed=$totalSpeed");
 
     if (closestX < closestY) {
       // we are closest to the left/right of the block, so we hit a vertical edge
@@ -155,7 +154,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the y direction.
         double middle = (block.position.top + block.position.bottom) / 2;
         double aim = (y - middle)/block.position.height*2;
-        //print("bounce left edge, aim=$aim");
         speedY = totalSpeed * aim;  // ball can go up or down depending on aim
         speedX = -(totalSpeed - speedY.abs()); // ball goes to the left
       } else {
@@ -166,7 +164,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the y direction.
         double middle = (block.position.top + block.position.bottom) / 2;
         double aim = (y - middle)/block.position.height*2;
-        //print("bounce right edge, aim=$aim");
         speedY = totalSpeed * aim;  // ball can go up or down depending on aim
         speedX = totalSpeed - speedY.abs(); // ball goes to the right
       }
@@ -180,7 +177,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the x direction.
         double middle = (block.position.left + block.position.right) / 2;
         double aim = (x - middle)/block.position.width*2;
-        //print("bounce top edge, aim=$aim");
         speedX = totalSpeed * aim;  // ball can go left or right depending on aim
         speedY = -(totalSpeed - speedX.abs()); // ball goes up
       } else {
@@ -191,7 +187,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the x direction.
         double middle = (block.position.left + block.position.right) / 2;
         double aim = (x - middle)/block.position.width*2;
-        //print("bounce bottom edge, aim=$aim");
         speedX = totalSpeed * aim;  // ball can go left or right depending on aim
         speedY = totalSpeed - speedX.abs(); // ball goes down
       }
