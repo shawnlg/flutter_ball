@@ -1,4 +1,4 @@
-fyuiut8yo. timport 'dart:ui';
+import 'dart:ui';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flame/components/component.dart';
