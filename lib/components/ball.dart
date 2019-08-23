@@ -14,19 +14,17 @@ class Ball extends Component {
   double speedScaleX;  // how many times screen width the x speed will be
   double speedScaleY;  // how many times screen width the y speed will be
   double x;  // the x location of the ball
-  double y;  // the y location of the
+  double y;  // the y location of the ball
   double speedX;  // speed in the x direction
   double speedY;  // speed in the y direction
   double width=0;  // size of the screen in the x direction
   double height=0;  // size of the screen in the y direction
   int lives;  // how many bounces until the ball dies
   Paint paint = Paint();  // paint the ball circle
-  final bool sound;  // if we play the bounce sound
+  final bool sound; // if bounce sound
 
   // create a ball
-  Ball(this.game, {this.x:0, this.y:0, this.sound:true,
-       color:Colors.white, size:10.0, speedX=1.0, speedY=1.0,
-       style = PaintingStyle.stroke, this.lives:10}) : super() {
+  Ball(this.game, {this.x=0, this.y=0, this.sound=true, this.lives=100, Color color=Colors.white, double size=10, double speedX=1, double speedY=1, PaintingStyle style = PaintingStyle.stroke}) : super() {
     paint.color = color;
     paint.strokeWidth = 1;
     paint.style = style;
