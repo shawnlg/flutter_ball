@@ -20,6 +20,14 @@ class GameIntro extends Component {
   static const int NUMBER_OF_BALLS = 100;
   static const double BALL_SIZE = 5.0;
   static const PaintingStyle BALL_STYLE = PaintingStyle.fill;
+  static const HELP_TEXT =
+    "Drag your finger to launch a ball. "
+    "The longer you\ndrag, the faster the ball will go. "
+    "The ball will go in\nthe direction you drag.\n\n"
+    "Try to bounce the ball and get rid of the blocks. "
+    "You\ncan drag around the red block to aim the ball.\n\n"
+    "Tap the screen to close help."
+      ;
 
   // instance variables
   final FlutterballGame game;
@@ -111,6 +119,38 @@ class GameIntro extends Component {
         startBalls();
         makeBlocks();
         state = IntroState.BALLS;
+        break;
+      case IntroState.HELP:
+        // if help screen is tapped, we clear it and start over
+        if (game.wasTapped) {
+          game.wasTapped = false;  // reset tap
+          game.clearComponents();  // removes help block
+          state = IntroState.STARTING;  // puts intro screen back and waits for taps again
+        }
+        break;
+      case IntroState.BALLS:
+        // check if any button was tapped
+        if (game.wasTapped) {
+          // something was tapped, so end it
+          game.wasTapped = false;  // reset tap
+          if (helpButton.position.contains(Offset(game.tapX,game.tapY))) {
+            // clear screen of components and put up help screen
+            game.clearComponents();
+            Block helpTitle = Block(game, position: Rect.fromLTWH(0, 0, sizeX, 50),
+              displayText: "Help", color: null, borderColor: null,
+              textStyle: TextStyle(fontSize: 20, color: Colors.blue, ),
+              bounce: false, draggable: false,
+            );
+            game.add(helpTitle);
+            Block helpScreen = Block(game, position: Rect.fromLTWH(0, 50, sizeX, 50),
+              displayText: HELP_TEXT, color: null, borderColor: null, textAlign: TextAlign.left,
+              textStyle: TextStyle(fontSize: 12, color: Colors.blue, ),
+              bounce: false, draggable: false,
+            );
+            game.add(helpScreen);
+            state = IntroState.HELP;
+          }
+        }
         break;
       default:
     }

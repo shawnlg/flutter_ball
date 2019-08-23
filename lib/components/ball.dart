@@ -21,12 +21,16 @@ class Ball extends Component {
   double height=0;  // size of the screen in the y direction
   int lives;  // how many bounces until the ball dies
   Paint paint = Paint();  // paint the ball circle
-  final bool sound;  // if we play the bounce sound
+  final bool sound; // if bounce sound
+  bool ignoreTop;  // go through top of screen instead of bouncing off it
+  bool ignoreBottom;
+  bool ignoreLeft;
+  bool ignoreRight;
 
   // create a ball
-  Ball(this.game, {this.x:0, this.y:0, this.sound:true,
-       color:Colors.white, size:10.0, speedX=1.0, speedY=1.0,
-       style = PaintingStyle.stroke, this.lives:10}) : super() {
+  Ball(this.game, {this.x=0, this.y=0, this.sound=false, this.lives=100,
+       this.ignoreTop:false, this.ignoreBottom:false, this.ignoreLeft:false, this.ignoreRight:false,
+       Color color=Colors.white, double size=10, double speedX=1, double speedY=1, PaintingStyle style = PaintingStyle.stroke}) : super() {
     paint.color = color;
     paint.strokeWidth = 1;
     paint.style = style;
@@ -65,7 +69,8 @@ class Ball extends Component {
       // play sound
       if (sound) Flame.audio.play('bounce.wav');
       lives--;  // lost a life after a bounce
-    } // if we did a bounce
+    }
+
   }
 
   // check if we bounced off the edge of the screen
@@ -73,18 +78,22 @@ class Ball extends Component {
     if (x < 0) {  // off the vertical edge
       speedX = -speedX;  // reverse x direction
       x = 0;  // move back into screen
+      if (ignoreLeft) lives=0;  // off the screen
       return true;
     } else if (x > width) {
       speedX = -speedX;  // reverse x direction
       x = width;  // move back into screen
+      if (ignoreRight) lives=0;  // off the screen
       return true;
     } else if (y < 0) {
       speedY = -speedY;  // reverse y direction
       y = 0;  // move back into screen
+      if (ignoreTop) lives=0;  // off the screen
       return true;
     } else if (y > height) {
       speedY = -speedY;  // reverse y direction
       y = height;  // move back into screen
+      if (ignoreBottom) lives=0;  // off the screen
       return true;
     } else {
       return false;
