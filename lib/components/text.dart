@@ -8,6 +8,7 @@ class TextDraw extends Component {
   Paint paint;  // paint the rectangle
   Paint border;  // paint the border
   Rect position;  // position of block
+  final topMargin;
 
   // show text inside box
   TextSpan textSpan;  // used to paint text
@@ -16,6 +17,7 @@ class TextDraw extends Component {
   );
 
   TextDraw(this.position, this.textSpan, {
+    this.topMargin:0.0,
     Color boxColor, Color borderColor,
     textAlign:TextAlign.center,
     borderThickness:1.0, scale:2.0,
@@ -51,7 +53,7 @@ class TextDraw extends Component {
     // draw the box, the border, and then the text on top
     if (paint != null) c.drawRect(position, paint);
     if (border != null) c.drawRect(position, border);
-    tp.paint(c, Offset(position.left, position.top));
+    tp.paint(c, Offset(position.left, position.top + topMargin));
   }
 
   void update(double t) {
