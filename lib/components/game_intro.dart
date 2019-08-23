@@ -22,10 +22,10 @@ class GameIntro extends Component {
   static const PaintingStyle BALL_STYLE = PaintingStyle.fill;
   static const HELP_TEXT =
     "Drag your finger to launch a ball. "
-    "The longer you\ndrag, the faster the ball will go. "
-    "The ball will go in\nthe direction you drag.\n\n"
+    "The longer you drag, the faster the ball will go. "
+    "The ball will go in the direction you drag.\n\n"
     "Try to bounce the ball and get rid of the blocks. "
-    "You\ncan drag around the red block to aim the ball.\n\n"
+    "You can drag around the red block to aim the ball.\n\n"
     "Tap the screen to close help."
       ;
 
@@ -65,6 +65,23 @@ class GameIntro extends Component {
       boxColor: Colors.blueGrey, borderColor: null, topMargin: 10.0,
     );
     game.add(helpButton);
+  }
+
+  // make help screen
+  void makeHelpScreen() {
+    TextStyle helpStyle = TextStyle(fontSize: 12, color: Colors.blue, );
+    TextSpan helpSpan = TextSpan(text: "Help", style: helpStyle);
+    TextDraw helpTitle = TextDraw(Rect.fromLTWH(0, 0, width, 50), helpSpan,
+      boxColor: null, borderColor: null,
+    );
+    game.add(helpTitle);
+
+    TextStyle textStyle = TextStyle(fontSize: 12, color: Colors.blue, );
+    TextSpan textSpan = TextSpan(text: HELP_TEXT, style: textStyle, );
+    TextDraw helpText = TextDraw(Rect.fromLTWH(0, 50, width, 50, ), textSpan,
+      boxColor: null, borderColor: null, textAlign: TextAlign.left,
+    );
+    game.add(helpText);
   }
 
   // start the balls bouncing
@@ -136,18 +153,7 @@ class GameIntro extends Component {
           if (helpButton.position.contains(Offset(game.tapX,game.tapY))) {
             // clear screen of components and put up help screen
             game.clearComponents();
-            Block helpTitle = Block(game, position: Rect.fromLTWH(0, 0, sizeX, 50),
-              displayText: "Help", color: null, borderColor: null,
-              textStyle: TextStyle(fontSize: 20, color: Colors.blue, ),
-              bounce: false, draggable: false,
-            );
-            game.add(helpTitle);
-            Block helpScreen = Block(game, position: Rect.fromLTWH(0, 50, sizeX, 50),
-              displayText: HELP_TEXT, color: null, borderColor: null, textAlign: TextAlign.left,
-              textStyle: TextStyle(fontSize: 12, color: Colors.blue, ),
-              bounce: false, draggable: false,
-            );
-            game.add(helpScreen);
+            makeHelpScreen();
             state = IntroState.HELP;
           }
         }

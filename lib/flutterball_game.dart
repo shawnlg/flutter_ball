@@ -2,14 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_ball/components/ball_releaser.dart';
-import 'package:flutter_ball/components/interactive_ball_releaser.dart';
+import 'package:flutter_ball/components/text.dart';
 import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
 import 'package:flutter_ball/components/game_intro.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
+  // handle gestures
   bool isDragging = false;  // true when user is dragging across the screen
   double dragX;   // x coordinate uf oser's finger
   double dragY;   // x coordinate uf oser's finger
@@ -22,6 +22,20 @@ class FlutterballGame extends BaseGame {
     GameIntro intro = GameIntro(this);
     add(intro);
   }
+
+  // remove all ball, text, and block components from the game
+  void clearComponents() {
+    components.forEach((c) {
+      if (c is Block) {
+        c.lives = 0;
+      } else if (c is Ball) {
+        c.lives = 0;
+      } else if (c is TextDraw) {
+        c.lives = 0;
+      }
+    });
+  }
+
 
   // gesture handlers
   void onDragStart(DragStartDetails d) {
@@ -43,6 +57,10 @@ class FlutterballGame extends BaseGame {
     tapX = d.globalPosition.dx;
     tapY = d.globalPosition.dy;
     wasTapped = true;
+  }
+
+  void cancelDrag() {
+    isDragging = false;
   }
 
 }
