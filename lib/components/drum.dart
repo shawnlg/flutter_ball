@@ -10,7 +10,6 @@ class Drum extends SpriteComponent  {
   final DrumController controller;
   final String sound;
 
-
   Drum(this.game, this.controller, double x, double y, double size, String image, this.sound) : super.square(size, image) {
     this.x = x;
     this.y = y;
@@ -22,12 +21,7 @@ class Drum extends SpriteComponent  {
     if (game.wasTapped && hitRect.contains(Offset(game.tapX,game.tapY))) {
       game.wasTapped = false;  // reset tap
       Flame.audio.play(sound);
-      if (controller.state == State.RECORD) {
-        // add this sound to the loop track.  Needs to be on the previous beat
-        int beat = controller.currentBeat - 1;
-        if (beat < 0) beat = LOOP_SIZE - 1;
-        controller.drumTrack[beat] = sound;
-      }
+      controller.drumTap(this);
     }
   }
 
