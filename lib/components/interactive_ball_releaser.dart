@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 import 'package:flame/components/component.dart';
@@ -13,12 +14,15 @@ class InteractiveBallReleaser extends Component {
   Paint paint = Paint();  // paint the line
   double width;  // width of screen
   double height;  // height of screen
+  int lives; // how many lives the ball launched should have
+  double speedScale;  // how much we scale speed based on line length
 
   // create the component
-  InteractiveBallReleaser(this.game) : super() {
+  InteractiveBallReleaser(this.game, {this.lives:1, this.speedScale:1.0}) : super() {
     paint.color = Colors.white;
     paint.strokeWidth = 1;
     paint.style = PaintingStyle.stroke;
+    game.cancelDrag();  // in case player was dragging already
   }
 
   void render(Canvas c) {
@@ -41,8 +45,20 @@ class InteractiveBallReleaser extends Component {
       // launch ball
       double speedX = (lineEnd.dx - lineStart.dx) / width;
       double speedY = (lineEnd.dy - lineStart.dy) / height;
-      Ball ball = Ball(game, x:lineStart.dx, y:lineStart.dy, speedX: speedX, speedY: speedY);
-      game.add(ball);
+      if (speedScale != 0) { // fixed speed
+        // get the speed of 1 screen width per second
+        double currentSpeed = sqrt(speedX*speedX + speedY*speedY);
+        double toNominalSpeed = 1.0 / currentSpeed;
+        print("speedX: $speedX, speedy: $speedY, currentSpeed: $currentSpeed, toNominalSpeed = $toNominalSpeed");
+        speedX = speedX * toNominalSpeed * speedScale;
+        speedY = speedY * toNominalSpeed * speedScale;
+        print("new speedX: $speedX, new speedy: $speedY");
+      }
+
+      Ball newBall = Ball(game, x: lineStart.dx, y: lineStart.dy,
+          speedX: speedX, speedY: speedY,
+          lives: lives);
+      game.add(newBall);
     } else {
       // user is still dragging and we are still making a line
       // just update the endpoint of the line in case user has moved finger
@@ -57,5 +73,6 @@ class InteractiveBallReleaser extends Component {
     height = size.height;
   }
 
+  bool destroy() => lives <= 0;
 
 }

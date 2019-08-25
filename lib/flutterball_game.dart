@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_ball/components/text.dart';
+import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
 import 'package:flutter_ball/components/game_intro.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
+  int level=1;  // level we are on
+
   // handle gestures
   bool isDragging = false;  // true when user is dragging across the screen
   double dragX;   // x coordinate uf oser's finger
@@ -19,6 +22,7 @@ class FlutterballGame extends BaseGame {
 
   // make a new game
   FlutterballGame() {
+    Block.canDrag = true;  // ok to drag
     GameIntro intro = GameIntro(this);
     add(intro);
   }
