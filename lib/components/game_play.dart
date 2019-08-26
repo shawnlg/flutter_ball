@@ -9,6 +9,7 @@ import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/game_intro.dart';
+import 'package:flutter_ball/components/text.dart';
 
 enum GameState {
   WAITING,  // waiting for screen size info
@@ -42,10 +43,10 @@ class GamePlay extends Component {
   bool ignoreLeft=false;
   bool ignoreRight=false;
   Paint paint = Paint();  // paint the lines showing sides not ignored
-  Block ballsLeftMessage;  // show balls left for current level
+  TextDraw ballsLeftMessage;  // show balls left for current level
   int ballBounces = 10;  // how many bounces new ball gets
-  Block bouncesLeftMessage;  // show bounces left for current ball
-  Block launchMessage;  // tell player to launch the ball
+  TextDraw bouncesLeftMessage;  // show bounces left for current ball
+  TextDraw launchMessage;  // tell player to launch the ball
   InteractiveBallReleaser launcher;  // ball launcher
   double speedScale=0.0;  // speed of launch
 
@@ -67,8 +68,7 @@ class GamePlay extends Component {
 
     game.components.forEach((c) {
       if (c is Block) {
-        Block b = c;
-        if (b.bounce && !b.draggable) {
+        if (!c.draggableBlock) {
           block = c;  // found a game block
         }
       } else if (c is Ball) {
@@ -77,7 +77,6 @@ class GamePlay extends Component {
     });
 
     if (block == null) {
-      print("no more blocks");
       // level cleared
       makeCompletedSplash(game,this);
       if (game.level < MAX_LEVELS) {
@@ -96,15 +95,14 @@ class GamePlay extends Component {
     } else if (ball == null) {  // still balls left to launch
       print("no more ball: ballsLeft=$ballsLeft");
       // need to launch another ball, but don't put up a splash screen
-      bouncesLeftMessage.displayText = "bounces: ";
+      updateBouncesLeftMessage(this,0);
       state = GameState.BALL_OVER;  // launch new ball
       print("state = ball over");
     } else {
       // still playing, so get the count for the total bounces left
-      ballsLeftMessage.displayText = "balls: $ballsLeft";
-      bouncesLeftMessage.displayText = "bounces: ${ball.lives}";
+      updateBallsLeftMessage(this);
+      updateBouncesLeftMessage(this, ball.lives);
     }
-
   }
 
   // check if ball has been launched yet

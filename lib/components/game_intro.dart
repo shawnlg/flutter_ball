@@ -36,8 +36,8 @@ class GameIntro extends Component {
   double height=0;  // size of the screen in the y direction
   TextDraw gameTitle;  // game title text
   TextDraw startButton;
-  Block levelPlus;
-  Block levelMinus;
+  TextDraw levelPlus;
+  TextDraw levelMinus;
   TextDraw helpButton;
   Random rnd = Random();  // rnandom number generator
 
@@ -54,10 +54,10 @@ class GameIntro extends Component {
     );
     game.add(gameTitle);
 
-    TextStyle startStyle = TextStyle(fontSize: 25, color: Colors.blue);
-    TextSpan startSpan = TextSpan(text: "Start", style: startStyle);
-    startButton = TextDraw(Rect.fromLTWH(width*0.3, height*0.6, width*0.4, 80), startSpan,
-      boxColor: Colors.blueGrey, borderColor: null, topMargin: 10.0,
+    TextStyle startStyle = TextStyle(fontSize: 20, color: Colors.blue);
+    TextSpan startSpan = TextSpan(text: "Start\nLevel 1", style: startStyle);
+    startButton = TextDraw(Rect.fromLTWH(width*0.3, height*0.6, width*0.4, 116), startSpan,
+      boxColor: Colors.blueGrey, borderColor: null, topMargin: 5.0,
     );
     game.add(startButton);
 
@@ -67,6 +67,20 @@ class GameIntro extends Component {
       boxColor: Colors.blueGrey, borderColor: null, topMargin: 10.0,
     );
     game.add(helpButton);
+
+    TextStyle style = TextStyle(fontSize: 50, color: Colors.blue);
+    TextSpan span = TextSpan(text: "-", style: style);
+    levelMinus = TextDraw(Rect.fromLTWH(0, height*0.6, 100, 0), span,
+      boxColor: Colors.blueGrey, borderColor: null,
+    );
+    game.add(levelMinus);
+
+    span = TextSpan(text: "+", style: style);
+    levelPlus = TextDraw(Rect.fromLTWH(width*0.75, height*0.6, 100, 0), span,
+      boxColor: Colors.blueGrey, borderColor: null,
+    );
+    game.add(levelPlus);
+
   }
 
   // make help screen
@@ -84,23 +98,6 @@ class GameIntro extends Component {
       boxColor: null, borderColor: null, textAlign: TextAlign.left,
     );
     game.add(helpText);
-  }
-
-
-    levelMinus = Block(game, position: Rect.fromLTWH(0, sizeY*0.5, 100, 100),
-      displayText: "-", color: Colors.blueGrey, borderColor: null,
-      textStyle: TextStyle(fontSize: 50, color: Colors.blue),
-      bounce: false, draggable: false,
-    );
-    game.add(levelMinus);
-
-    levelPlus = Block(game, position: Rect.fromLTWH(sizeX*0.75, sizeY*0.5, 100, 100),
-      displayText: "+", color: Colors.blueGrey, borderColor: null,
-      textStyle: TextStyle(fontSize: 50, color: Colors.blue),
-      bounce: false, draggable: false,
-    );
-    game.add(levelPlus);
-
   }
 
   // start the balls bouncing
@@ -187,14 +184,14 @@ class GameIntro extends Component {
             // subtract one from the game level and update start button text
             if (game.level > 1) {
               game.level--;
-              startButton.displayText = "Start\nLevel ${game.level}";
+              startButton.text = "Start\nLevel ${game.level}";
             }
           }
           if (levelPlus.position.contains(Offset(game.tapX,game.tapY))) {
             // subtract one from the game level and update start button text
             if (game.level < GamePlay.MAX_LEVELS) {
               game.level++;
-              startButton.displayText = "Start\nLevel ${game.level}";
+              startButton.text = "Start\nLevel ${game.level}";
             }
           }
         }
