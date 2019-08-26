@@ -38,10 +38,6 @@ class GamePlay extends Component {
   double sizeY=0;  // size of the screen in the y direction
   double splashOver;  // when to stop showing splash screen
   int ballsLeft = 0;
-  bool ignoreTop=false;  // go through top of screen instead of bouncing off it
-  bool ignoreBottom=false;
-  bool ignoreLeft=false;
-  bool ignoreRight=false;
   Paint paint = Paint();  // paint the lines showing sides not ignored
   TextDraw ballsLeftMessage;  // show balls left for current level
   int ballBounces = 10;  // how many bounces new ball gets
@@ -112,11 +108,6 @@ class GamePlay extends Component {
       if (c is Ball) {
         Ball ball = c;
         launched = true;  // found a bouncing one
-        // set the bounce on edge properties of the ball
-        ball.ignoreTop = ignoreTop;
-        ball.ignoreBottom = ignoreBottom;
-        ball.ignoreLeft = ignoreLeft;
-        ball.ignoreRight = ignoreRight;
       }
     });
     return launched;
@@ -199,18 +190,6 @@ class GamePlay extends Component {
   void render(Canvas c) {
     if (state == GameState.LAUNCHING || state == GameState.PLAYING) {
       // draw lines showing which sides are ignored
-      if (!ignoreTop) {
-        c.drawLine(Offset(0.0, 1.0), Offset(sizeX, 1.0), paint);
-      }
-      if (!ignoreBottom) {
-        c.drawLine(Offset(0.0, sizeY), Offset(sizeX, sizeY), paint);
-      }
-      if (!ignoreLeft) {
-        c.drawLine(Offset(1.0, 0.0), Offset(1.0, sizeY), paint);
-      }
-      if (!ignoreRight) {
-        c.drawLine(Offset(sizeX, 0.0), Offset(sizeX, sizeY), paint);
-      }
     }
   }
 

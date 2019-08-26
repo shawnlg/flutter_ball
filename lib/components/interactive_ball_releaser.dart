@@ -57,7 +57,7 @@ class InteractiveBallReleaser extends Component {
 
       Ball newBall = Ball(game, x: lineStart.dx, y: lineStart.dy,
           speedX: speedX, speedY: speedY,
-          lives: lives);
+          lives: lives, sound: true);
       game.add(newBall);
     } else {
       // user is still dragging and we are still making a line
