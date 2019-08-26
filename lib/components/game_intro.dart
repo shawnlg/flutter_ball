@@ -5,12 +5,12 @@ import 'package:flame/components/component.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 import 'package:flutter_ball/components/text.dart';
 import 'package:flutter_ball/components/ball.dart';
+import 'package:flutter_ball/components/game_play.dart';
 
 enum IntroState {
   WAITING,  // waiting for screen size info
   STARTING, // putting up the intro screen
   BALLS,   // showing random balls
-  PLAY,// ready to play game
   HELP, // showing help screen
   DEAD, // destroy component
 }
@@ -36,6 +36,8 @@ class GameIntro extends Component {
   double height=0;  // size of the screen in the y direction
   TextDraw gameTitle;  // game title text
   TextDraw startButton;
+  TextDraw levelPlus;
+  TextDraw levelMinus;
   TextDraw helpButton;
   Random rnd = Random();  // rnandom number generator
 
@@ -52,10 +54,10 @@ class GameIntro extends Component {
     );
     game.add(gameTitle);
 
-    TextStyle startStyle = TextStyle(fontSize: 25, color: Colors.blue);
-    TextSpan startSpan = TextSpan(text: "Start", style: startStyle);
-    startButton = TextDraw(Rect.fromLTWH(width*0.3, height*0.6, width*0.4, 80), startSpan,
-      boxColor: Colors.blueGrey, borderColor: null, topMargin: 10.0,
+    TextStyle startStyle = TextStyle(fontSize: 20, color: Colors.blue);
+    TextSpan startSpan = TextSpan(text: "Start\nLevel 1", style: startStyle);
+    startButton = TextDraw(Rect.fromLTWH(width*0.3, height*0.6, width*0.4, 116), startSpan,
+      boxColor: Colors.blueGrey, borderColor: null, topMargin: 5.0,
     );
     game.add(startButton);
 
@@ -65,6 +67,20 @@ class GameIntro extends Component {
       boxColor: Colors.blueGrey, borderColor: null, topMargin: 10.0,
     );
     game.add(helpButton);
+
+    TextStyle style = TextStyle(fontSize: 50, color: Colors.blue);
+    TextSpan span = TextSpan(text: "-", style: style);
+    levelMinus = TextDraw(Rect.fromLTWH(0, height*0.6, 100, 0), span,
+      boxColor: Colors.blueGrey, borderColor: null,
+    );
+    game.add(levelMinus);
+
+    span = TextSpan(text: "+", style: style);
+    levelPlus = TextDraw(Rect.fromLTWH(width*0.75, height*0.6, 100, 0), span,
+      boxColor: Colors.blueGrey, borderColor: null,
+    );
+    game.add(levelPlus);
+
   }
 
   // make help screen
@@ -123,6 +139,7 @@ class GameIntro extends Component {
     if (size.width <= 0) return;
 
     // save screen width and height
+    game.clearComponents();
     width = size.width;
     height = size.height;
     state = IntroState.STARTING;
@@ -155,6 +172,27 @@ class GameIntro extends Component {
             game.clearComponents();
             makeHelpScreen();
             state = IntroState.HELP;
+          }
+          if (startButton.position.contains(Offset(game.tapX,game.tapY))) {
+            // remove all components and add the game player component
+            game.clearComponents();
+            GamePlay gamePlay = GamePlay(game);
+            game.add(gamePlay);
+            state = IntroState.DEAD;
+          }
+          if (levelMinus.position.contains(Offset(game.tapX,game.tapY))) {
+            // subtract one from the game level and update start button text
+            if (game.level > 1) {
+              game.level--;
+              startButton.text = "Start\nLevel ${game.level}";
+            }
+          }
+          if (levelPlus.position.contains(Offset(game.tapX,game.tapY))) {
+            // subtract one from the game level and update start button text
+            if (game.level < GamePlay.MAX_LEVELS) {
+              game.level++;
+              startButton.text = "Start\nLevel ${game.level}";
+            }
           }
         }
         break;

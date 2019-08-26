@@ -7,33 +7,31 @@ import 'package:flutter_ball/components/game_play.dart';
 const double SPLASH_TIME  = 5.0;
 
 void addBallsLeftMessage(FlutterballGame game, GamePlay gp) {
-  TextStyle messageStyle = TextStyle(fontSize: 15, color: Colors.white);
+  print("addBallsLeftMessage");
+  TextStyle messageStyle = TextStyle(fontSize: 12, color: Colors.white);
   TextSpan messageSpan = TextSpan(text: "balls: ${gp.ballsLeft}", style: messageStyle);
-  gp.ballsLeftMessage = TextDraw(Rect.fromLTWH(0, gp.sizeY-40, 100, 20), messageSpan,
-    boxColor: null, borderColor: null,
+  gp.ballsLeftMessage = TextDraw(Rect.fromLTWH(5, gp.sizeY-30, 100, 20), messageSpan,
+    boxColor: null, borderColor: null, textAlign: TextAlign.left,
   );
   game.add(gp.ballsLeftMessage);
 }
 
 void updateBallsLeftMessage(GamePlay gp) {
-  TextStyle messageStyle = TextStyle(fontSize: 15, color: Colors.white);
-  TextSpan messageSpan = TextSpan(text: "balls: ${gp.ballsLeft}", style: messageStyle);
-  gp.ballsLeftMessage.text = messageSpan;
+  gp.ballsLeftMessage.text = "balls: ${gp.ballsLeft}";
 }
 
 void addBouncesLeftMessage(FlutterballGame game, GamePlay gp) {
-  TextStyle messageStyle = TextStyle(fontSize: 15, color: Colors.white);
+  print("addBouncesLeftMessage");
+  TextStyle messageStyle = TextStyle(fontSize: 12, color: Colors.white);
   TextSpan messageSpan = TextSpan(text: "bounces: ", style: messageStyle);
-  gp.ballsLeftMessage = TextDraw(Rect.fromLTWH(gp.sizeX-150, gp.sizeY-40, 100, 20), messageSpan,
-    boxColor: null, borderColor: null,
+  gp.bouncesLeftMessage = TextDraw(Rect.fromLTWH(gp.sizeX-150, gp.sizeY-30, 200, 20), messageSpan,
+    boxColor: null, borderColor: null, textAlign: TextAlign.left,
   );
   game.add(gp.bouncesLeftMessage);
 }
 
 void updateBouncesLeftMessage(GamePlay gp, int bounces) {
-  TextStyle messageStyle = TextStyle(fontSize: 15, color: Colors.white);
-  TextSpan messageSpan = TextSpan(text: "bounces: $bounces", style: messageStyle);
-  gp.ballsLeftMessage.text = messageSpan;
+  gp.bouncesLeftMessage.text = "bounces: $bounces";
 }
 
 void addLaunchMessage(FlutterballGame game, GamePlay gp) {

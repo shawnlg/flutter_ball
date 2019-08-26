@@ -47,8 +47,8 @@ class TextDraw extends Component {
   }
 
   // change text being displayed
-  set text(TextSpan span) {
-    tp.text = span;
+  set text(String text) {
+    tp.text = TextSpan(text: text, style: tp.text.style);
     tp.layout(minWidth: position.width, maxWidth: position.width,);
 
     // see if box is too short

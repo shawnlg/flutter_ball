@@ -17,6 +17,7 @@ class Block extends Component {
   final FlutterballGame game;
   int _lives;  // how many hits until the block dies
   Paint paint = Paint();  // paint the rectangle
+  Paint borderPaint = Paint();  // paint the border
   Rect position;  // position of block
   // show lives inside block
   TextPainter tp = TextPainter(
@@ -32,10 +33,17 @@ class Block extends Component {
   final bool draggableBlock;  // if this block can be dragged
 
   // create a block
-  Block(this.game, {this.position, Color color=Colors.white, lives=10,
+  Block(this.game, {this.position, color:Colors.white, borderColor:null, lives:10,
         this.draggableBlock = false,}) : super() {
     paint.color = color;
     paint.style = PaintingStyle.fill;
+    if (borderColor != null) {
+      borderPaint.color = borderColor;
+      borderPaint.style = PaintingStyle.stroke;
+      borderPaint.strokeWidth = 1.0;
+    } else {
+      borderPaint = null;
+    }
     this.lives = lives;
   }
 
@@ -54,6 +62,7 @@ class Block extends Component {
   void render(Canvas c) {
     // draw the block and then the text on top
     c.drawRect(position, paint);
+    if (borderPaint != null) c.drawRect(position, borderPaint);
     tp.paint(c, position.translate(0, 10).topLeft);
   }
 
