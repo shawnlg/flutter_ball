@@ -11,7 +11,7 @@ void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
 
   TextStyle style = TextStyle(fontSize: 20, color: Colors.blue,);
   TextSpan span = TextSpan(text: "Level ${game.level}\n", style: style);
-  TextDraw textBox = TextDraw(Rect.fromLTWH(0, 0, gp.sizeX, gp.sizeY), span,
+  TextDraw textBox = TextDraw(Rect.fromLTWH(0, 0, gp.width, gp.height), span,
     boxColor: null, borderColor: null,
   );
   game.add(textBox);
@@ -20,7 +20,7 @@ void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
 // add a block using fraction of screen sizes instead of pixels
 void addBlock(FlutterballGame game, GamePlay gp, double x, double y, double width,
     {Color color : Colors.blue, int lives : 10, }) {
-  Rect position = Rect.fromLTWH(x*gp.sizeX, y*gp.sizeY, width*gp.sizeX, width*gp.sizeX);
+  Rect position = Rect.fromLTWH(x*gp.width, y*gp.height, width*gp.width, width*gp.width);
   Block block = Block(game, position: position,
     color: color, borderColor: Colors.black,
     draggableBlock: false, lives: lives,
