@@ -31,7 +31,10 @@ void addBlock(FlutterballGame game, GamePlay gp, double x, double y, double widt
 // set up game for a particular level
 void makeLevel(FlutterballGame game, GamePlay gp) {
   game.clearComponents();
+
+  // make a level - all levels actually
   addBlock(game, gp, 0.4, 0.0, 0.1, lives: 1);
   gp.ballsLeft = 5;
   gp.ballBounces = 5;
+  gp.ignoreBottom = true;
 }
