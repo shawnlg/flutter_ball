@@ -37,8 +37,10 @@ class GamePlay extends Component {
   double width=0;  // size of the screen in the x direction
   double height=0;  // size of the screen in the y direction
   double splashOver;  // when to stop showing splash screen
-  int ballsLeft = 0;  // how many balls the player gets in the level
-  int ballBounces = 1;  // how many bounces each ball gets
+  int ballsLeft = 0;
+  TextDraw ballsLeftMessage;  // show balls left for current level
+  int ballBounces = 10;  // how many bounces new ball gets
+  TextDraw bouncesLeftMessage;  // show bounces left for current ball
   TextDraw launchMessage;  // tell player to launch the ball
   InteractiveBallReleaser launcher;  // ball launcher
   double speedScale=0.0;  // speed of launch
@@ -81,8 +83,12 @@ class GamePlay extends Component {
       makeLoseSplashScreen(game,this);
     } else if (ball == null) {  // still balls left to launch
       // need to launch another ball, but don't put up a splash screen
+      updateBouncesLeftMessage(this,0);
       state = GameState.BALL_OVER;  // launch new ball
     } else {
+      // still playing, so get the count for the total bounces left
+      updateBallsLeftMessage(this);
+      updateBouncesLeftMessage(this, ball.lives);
     }
   }
 
@@ -112,10 +118,12 @@ class GamePlay extends Component {
           // put up level screen if we just put up splash screen
           if (state == GameState.SPLASH) {
             makeLevel(game,this);
+            addBallsLeftMessage(game,this);
+            addBouncesLeftMessage(game,this);
           }
 
           // add component that launches the ball
-          launcher = InteractiveBallReleaser(game, speedScale: speedScale, lives: ballBounces);
+          launcher = InteractiveBallReleaser(game, lives: ballBounces, speedScale: speedScale);
           game.add(launcher);
           addLaunchMessage(game,this);
           state = GameState.LAUNCHING;
