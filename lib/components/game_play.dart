@@ -105,13 +105,12 @@ class GamePlay extends Component {
     bool launched = false;
     game.components.forEach((c) {
       if (c is Ball) {
-        Ball ball = c;
         launched = true;  // found a bouncing one
         // set the bounce on edge properties of the ball
-        ball.ignoreTop = ignoreTop;
-        ball.ignoreBottom = ignoreBottom;
-        ball.ignoreLeft = ignoreLeft;
-        ball.ignoreRight = ignoreRight;
+        c.ignoreTop = ignoreTop;
+        c.ignoreBottom = ignoreBottom;
+        c.ignoreLeft = ignoreLeft;
+        c.ignoreRight = ignoreRight;
       }
     });
     return launched;
@@ -190,16 +189,16 @@ class GamePlay extends Component {
     if (state == GameState.LAUNCHING || state == GameState.PLAYING) {
       // draw lines showing which sides are ignored
       if (!ignoreTop) {
-        c.drawLine(Offset(0.0, 1.0), Offset(sizeX, 1.0), paint);
+        c.drawLine(Offset(0.0, 1.0), Offset(width, 1.0), paint);
       }
       if (!ignoreBottom) {
-        c.drawLine(Offset(0.0, sizeY), Offset(sizeX, sizeY), paint);
+        c.drawLine(Offset(0.0, height), Offset(width, height), paint);
       }
       if (!ignoreLeft) {
-        c.drawLine(Offset(1.0, 0.0), Offset(1.0, sizeY), paint);
+        c.drawLine(Offset(1.0, 0.0), Offset(1.0, height), paint);
       }
       if (!ignoreRight) {
-        c.drawLine(Offset(sizeX, 0.0), Offset(sizeX, sizeY), paint);
+        c.drawLine(Offset(width, 0.0), Offset(width, height), paint);
       }
     }
   }
