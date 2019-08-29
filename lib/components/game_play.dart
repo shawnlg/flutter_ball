@@ -34,8 +34,8 @@ class GamePlay extends Component {
   // instance variables
   final FlutterballGame game;
   GameState state = GameState.WAITING;
-  double sizeX=0;  // size of the screen in the x direction
-  double sizeY=0;  // size of the screen in the y direction
+  double width=0;  // size of the screen in the x direction
+  double height=0;  // size of the screen in the y direction
   double splashOver;  // when to stop showing splash screen
   int ballsLeft = 0;
   bool ignoreTop=false;  // go through top of screen instead of bouncing off it
@@ -62,7 +62,7 @@ class GamePlay extends Component {
   // - player loses level
   // - player needs to launch new ball
   void checkPlay() {
-    // count the number of blocks and balls on screen
+    // check for blocks and balls on screen
     Block block; // found a block that ball can bounce on
     Ball ball;  // found a ball that is bouncing
 
@@ -82,22 +82,17 @@ class GamePlay extends Component {
       if (game.level < MAX_LEVELS) {
         game.level++;  // go to next level
         state = GameState.COMPLETED;  // wait for splash
-        print("state = splash");
       } else {
         // reached last level
         state = GameState.OVER;
       }
     } else if (ball == null && ballsLeft <= 0) {  // no more balls left
-      print("no more ball: ballsLeft=$ballsLeft");
       state = GameState.LOST;
-      print("state = lost");
       makeLoseSplashScreen(game,this);
     } else if (ball == null) {  // still balls left to launch
-      print("no more ball: ballsLeft=$ballsLeft");
       // need to launch another ball, but don't put up a splash screen
       updateBouncesLeftMessage(this,0);
       state = GameState.BALL_OVER;  // launch new ball
-      print("state = ball over");
     } else {
       // still playing, so get the count for the total bounces left
       updateBallsLeftMessage(this);
@@ -129,7 +124,6 @@ class GamePlay extends Component {
         makeLevelSplashScreen(game,this);
         splashOver = game.currentTime() + SPLASH_TIME;
         state = GameState.SPLASH;
-        print("state = splash");
         break;
       case GameState.SPLASH:
       case GameState.BALL_OVER:
@@ -146,7 +140,6 @@ class GamePlay extends Component {
           game.add(launcher);
           addLaunchMessage(game,this);
           state = GameState.LAUNCHING;
-          print("state = launching");
         }
         break;
       case GameState.COMPLETED:
@@ -162,7 +155,6 @@ class GamePlay extends Component {
           launchMessage.lives = 0;  // remove launch message
           launcher.lives = 0;  // remove launcher
           state = GameState.PLAYING;
-          print("state = playing");
         }
         break;
       case GameState.PLAYING:
@@ -171,13 +163,12 @@ class GamePlay extends Component {
       case GameState.LOST:
       case GameState.OVER:
         if (game.currentTime() > splashOver) {
-          // down showing lose screen
+          // done showing lose screen
           // go back to start screen
           game.clearComponents();
           GameIntro gameIntro = GameIntro(game);
           game.add(gameIntro);
           state = GameState.DEAD;
-          print("state = dead");
         }
         break;
       default:
@@ -190,10 +181,9 @@ class GamePlay extends Component {
     if (size.width <= 0) return;
 
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
+    width = size.width;
+    height = size.height;
     state = GameState.STARTING;
-    print("state = starting");
   }
 
   void render(Canvas c) {

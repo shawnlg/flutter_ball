@@ -18,7 +18,7 @@ class InteractiveBallReleaser extends Component {
   double speedScale;  // how much we scale speed based on line length
 
   // create the component
-  InteractiveBallReleaser(this.game, {this.lives:1, this.speedScale:1.0}) : super() {
+  InteractiveBallReleaser(this.game, {this.lives:10, this.speedScale:1.0}) : super() {
     paint.color = Colors.white;
     paint.strokeWidth = 1;
     paint.style = PaintingStyle.stroke;
@@ -49,16 +49,14 @@ class InteractiveBallReleaser extends Component {
         // get the speed of 1 screen width per second
         double currentSpeed = sqrt(speedX*speedX + speedY*speedY);
         double toNominalSpeed = 1.0 / currentSpeed;
-        print("speedX: $speedX, speedy: $speedY, currentSpeed: $currentSpeed, toNominalSpeed = $toNominalSpeed");
         speedX = speedX * toNominalSpeed * speedScale;
         speedY = speedY * toNominalSpeed * speedScale;
-        print("new speedX: $speedX, new speedy: $speedY");
       }
 
-      Ball newBall = Ball(game, x: lineStart.dx, y: lineStart.dy,
+      Ball ball = Ball(game, x: lineStart.dx, y: lineStart.dy,
           speedX: speedX, speedY: speedY,
-          lives: lives);
-      game.add(newBall);
+          lives: lives, sound: true);
+      game.add(ball);
     } else {
       // user is still dragging and we are still making a line
       // just update the endpoint of the line in case user has moved finger
