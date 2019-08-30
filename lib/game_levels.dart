@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ball/flutterball_game.dart';
 import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/game_play.dart';
-
+import 'package:flutter_ball/components/text.dart';
 
 // set up splash screen for level
 void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
@@ -19,47 +19,42 @@ void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
     "Let the ball do the work.",
     "Time to face the challenge.",
   ];
-  game.clearComponents();
-  Block levelTitle = Block(
-    game, position: Rect.fromLTWH(0, 0, gp.sizeX, gp.sizeY),
-    displayText: "Level ${game.level}\n",
-    color: null,
-    borderColor: null,
-    textStyle: TextStyle(fontSize: 20, color: Colors.blue,),
-    bounce: false,
-    draggable: false,
-  );
-  game.add(levelTitle);
 
-  Block levelMessage = Block(
-    game, position: Rect.fromLTWH(0, 50, gp.sizeX, 50),
-    displayText: LEVEL_TEXT[game.level - 1],
-    color: null,
-    borderColor: null,
-    textAlign: TextAlign.left,
-    textStyle: TextStyle(fontSize: 12, color: Colors.blue,),
-    bounce: false,
-    draggable: false,
+  game.clearComponents();
+
+  TextStyle style = TextStyle(fontSize: 20, color: Colors.blue,);
+  TextSpan span = TextSpan(text: "Level ${game.level}\n", style: style);
+  TextDraw textBox = TextDraw(Rect.fromLTWH(0, 0, gp.sizeX, gp.sizeY), span,
+    boxColor: null, borderColor: null,
   );
-  game.add(levelMessage);
+  game.add(textBox);
+
+  style = TextStyle(fontSize: 12, color: Colors.blue,);
+  span = TextSpan(text: LEVEL_TEXT[game.level - 1], style: style);
+  textBox = TextDraw(Rect.fromLTWH(0, 50, gp.sizeX, 50), span,
+    boxColor: null, borderColor: null,
+  );
+  game.add(textBox);
 }
 
+// add a block using fraction of screen sizes instead of pixels
 void addBlock(FlutterballGame game, GamePlay gp, double x, double y, double width,
     {Color color : Colors.blue, int lives : 10, }) {
   Rect position = Rect.fromLTWH(x*gp.sizeX, y*gp.sizeY, width*gp.sizeX, width*gp.sizeX);
   Block block = Block(game, position: position,
     color: color, borderColor: Colors.black,
-    bounce: true, draggable: false, lives: lives,
+    draggableBlock: false, lives: lives,
   );
   game.add(block);
 }
 
+// add a block using pixels
 void addBlockExact(FlutterballGame game, GamePlay gp, double x, double y, double width,
     {Color color : Colors.blue, int lives : 10, }) {
   Rect position = Rect.fromLTWH(x, y, width, width);
   Block block = Block(game, position: position,
     color: color, borderColor: Colors.black,
-    bounce: true, draggable: false, lives: lives,
+    draggableBlock: false, lives: lives,
   );
   game.add(block);
 }
@@ -69,7 +64,7 @@ void addAimBlock(FlutterballGame game, GamePlay gp, double x, double y, double w
   Rect position = Rect.fromLTWH(x*gp.sizeX, y*gp.sizeY, width*gp.sizeX, height*gp.sizeY);
   Block block = Block(game, position: position,
     color: color, borderColor: Colors.black,
-    bounce: true, draggable: true, lives: lives,
+    draggableBlock: true, lives: lives,
   );
   game.add(block);
 }
@@ -77,6 +72,7 @@ void addAimBlock(FlutterballGame game, GamePlay gp, double x, double y, double w
 
 // set up game for a particular level
 void makeLevel(FlutterballGame game, GamePlay gp) {
+  print("makeLevel ${game.level}");
   game.clearComponents();
   gp.speedScale = 0.0; // default
   switch (game.level) {
