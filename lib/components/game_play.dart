@@ -9,6 +9,7 @@ import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/game_intro.dart';
+import 'package:flutter_ball/components/text.dart';
 
 enum GameState {
   WAITING,  // waiting for screen size info
@@ -33,8 +34,8 @@ class GamePlay extends Component {
   // instance variables
   final FlutterballGame game;
   GameState state = GameState.WAITING;
-  double sizeX=0;  // size of the screen in the x direction
-  double sizeY=0;  // size of the screen in the y direction
+  double width=0;  // size of the screen in the x direction
+  double height=0;  // size of the screen in the y direction
   double splashOver;  // when to stop showing splash screen
   int ballsLeft = 0;
   bool ignoreTop=false;  // go through top of screen instead of bouncing off it
@@ -42,10 +43,10 @@ class GamePlay extends Component {
   bool ignoreLeft=false;
   bool ignoreRight=false;
   Paint paint = Paint();  // paint the lines showing sides not ignored
-  Block ballsLeftMessage;  // show balls left for current level
+  TextDraw ballsLeftMessage;  // show balls left for current level
   int ballBounces = 10;  // how many bounces new ball gets
-  Block bouncesLeftMessage;  // show bounces left for current ball
-  Block launchMessage;  // tell player to launch the ball
+  TextDraw bouncesLeftMessage;  // show bounces left for current ball
+  TextDraw launchMessage;  // tell player to launch the ball
   InteractiveBallReleaser launcher;  // ball launcher
   double speedScale=0.0;  // speed of launch
 
@@ -61,14 +62,13 @@ class GamePlay extends Component {
   // - player loses level
   // - player needs to launch new ball
   void checkPlay() {
-    // count the number of blocks and balls on screen
+    // check for blocks and balls on screen
     Block block; // found a block that ball can bounce on
     Ball ball;  // found a ball that is bouncing
 
     game.components.forEach((c) {
       if (c is Block) {
-        Block b = c;
-        if (b.bounce && !b.draggable) {
+        if (!c.draggableBlock) {
           block = c;  // found a game block
         }
       } else if (c is Ball) {
@@ -77,34 +77,27 @@ class GamePlay extends Component {
     });
 
     if (block == null) {
-      print("no more blocks");
       // level cleared
       makeCompletedSplash(game,this);
       if (game.level < MAX_LEVELS) {
         game.level++;  // go to next level
         state = GameState.COMPLETED;  // wait for splash
-        print("state = splash");
       } else {
         // reached last level
         state = GameState.OVER;
       }
     } else if (ball == null && ballsLeft <= 0) {  // no more balls left
-      print("no more ball: ballsLeft=$ballsLeft");
       state = GameState.LOST;
-      print("state = lost");
       makeLoseSplashScreen(game,this);
     } else if (ball == null) {  // still balls left to launch
-      print("no more ball: ballsLeft=$ballsLeft");
       // need to launch another ball, but don't put up a splash screen
-      bouncesLeftMessage.displayText = "bounces: ";
+      updateBouncesLeftMessage(this,0);
       state = GameState.BALL_OVER;  // launch new ball
-      print("state = ball over");
     } else {
       // still playing, so get the count for the total bounces left
-      ballsLeftMessage.displayText = "balls: $ballsLeft";
-      bouncesLeftMessage.displayText = "bounces: ${ball.lives}";
+      updateBallsLeftMessage(this);
+      updateBouncesLeftMessage(this, ball.lives);
     }
-
   }
 
   // check if ball has been launched yet
@@ -112,13 +105,12 @@ class GamePlay extends Component {
     bool launched = false;
     game.components.forEach((c) {
       if (c is Ball) {
-        Ball ball = c;
         launched = true;  // found a bouncing one
         // set the bounce on edge properties of the ball
-        ball.ignoreTop = ignoreTop;
-        ball.ignoreBottom = ignoreBottom;
-        ball.ignoreLeft = ignoreLeft;
-        ball.ignoreRight = ignoreRight;
+        c.ignoreTop = ignoreTop;
+        c.ignoreBottom = ignoreBottom;
+        c.ignoreLeft = ignoreLeft;
+        c.ignoreRight = ignoreRight;
       }
     });
     return launched;
@@ -131,7 +123,6 @@ class GamePlay extends Component {
         makeLevelSplashScreen(game,this);
         splashOver = game.currentTime() + SPLASH_TIME;
         state = GameState.SPLASH;
-        print("state = splash");
         break;
       case GameState.SPLASH:
       case GameState.BALL_OVER:
@@ -148,7 +139,6 @@ class GamePlay extends Component {
           game.add(launcher);
           addLaunchMessage(game,this);
           state = GameState.LAUNCHING;
-          print("state = launching");
         }
         break;
       case GameState.COMPLETED:
@@ -164,7 +154,6 @@ class GamePlay extends Component {
           launchMessage.lives = 0;  // remove launch message
           launcher.lives = 0;  // remove launcher
           state = GameState.PLAYING;
-          print("state = playing");
         }
         break;
       case GameState.PLAYING:
@@ -173,13 +162,12 @@ class GamePlay extends Component {
       case GameState.LOST:
       case GameState.OVER:
         if (game.currentTime() > splashOver) {
-          // down showing lose screen
+          // done showing lose screen
           // go back to start screen
           game.clearComponents();
           GameIntro gameIntro = GameIntro(game);
           game.add(gameIntro);
           state = GameState.DEAD;
-          print("state = dead");
         }
         break;
       default:
@@ -192,26 +180,25 @@ class GamePlay extends Component {
     if (size.width <= 0) return;
 
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
+    width = size.width;
+    height = size.height;
     state = GameState.STARTING;
-    print("state = starting");
   }
 
   void render(Canvas c) {
     if (state == GameState.LAUNCHING || state == GameState.PLAYING) {
       // draw lines showing which sides are ignored
       if (!ignoreTop) {
-        c.drawLine(Offset(0.0, 1.0), Offset(sizeX, 1.0), paint);
+        c.drawLine(Offset(0.0, 1.0), Offset(width, 1.0), paint);
       }
       if (!ignoreBottom) {
-        c.drawLine(Offset(0.0, sizeY), Offset(sizeX, sizeY), paint);
+        c.drawLine(Offset(0.0, height), Offset(width, height), paint);
       }
       if (!ignoreLeft) {
-        c.drawLine(Offset(1.0, 0.0), Offset(1.0, sizeY), paint);
+        c.drawLine(Offset(1.0, 0.0), Offset(1.0, height), paint);
       }
       if (!ignoreRight) {
-        c.drawLine(Offset(sizeX, 0.0), Offset(sizeX, sizeY), paint);
+        c.drawLine(Offset(width, 0.0), Offset(width, height), paint);
       }
     }
   }

@@ -12,13 +12,13 @@ class InteractiveBallReleaser extends Component {
   Offset lineStart;
   Offset lineEnd;
   Paint paint = Paint();  // paint the line
-  double sizeX;  // width of screen
-  double sizeY;  // height of screen
+  double width;  // width of screen
+  double height;  // height of screen
   int lives; // how many lives the ball launched should have
   double speedScale;  // how much we scale speed based on line length
 
   // create the component
-  InteractiveBallReleaser(this.game, {this.lives:1, this.speedScale:1.0}) : super() {
+  InteractiveBallReleaser(this.game, {this.lives:10, this.speedScale:1.0}) : super() {
     paint.color = Colors.white;
     paint.strokeWidth = 1;
     paint.style = PaintingStyle.stroke;
@@ -43,22 +43,20 @@ class InteractiveBallReleaser extends Component {
       // user no longer dragging but we are still making the line
       makingLine = false;  // stop making the line
       // launch ball
-      double speedX = (lineEnd.dx - lineStart.dx) / sizeX;
-      double speedY = (lineEnd.dy - lineStart.dy) / sizeY;
+      double speedX = (lineEnd.dx - lineStart.dx) / width;
+      double speedY = (lineEnd.dy - lineStart.dy) / height;
       if (speedScale != 0) { // fixed speed
         // get the speed of 1 screen width per second
         double currentSpeed = sqrt(speedX*speedX + speedY*speedY);
         double toNominalSpeed = 1.0 / currentSpeed;
-        print("speedX: $speedX, speedy: $speedY, currentSpeed: $currentSpeed, toNominalSpeed = $toNominalSpeed");
         speedX = speedX * toNominalSpeed * speedScale;
         speedY = speedY * toNominalSpeed * speedScale;
-        print("new speedX: $speedX, new speedy: $speedY");
       }
 
-      Ball newBall = Ball(game, x: lineStart.dx, y: lineStart.dy,
+      Ball ball = Ball(game, x: lineStart.dx, y: lineStart.dy,
           speedX: speedX, speedY: speedY,
-          lives: lives);
-      game.add(newBall);
+          lives: lives, sound: true);
+      game.add(ball);
     } else {
       // user is still dragging and we are still making a line
       // just update the endpoint of the line in case user has moved finger
@@ -69,8 +67,8 @@ class InteractiveBallReleaser extends Component {
   // the game engine will tell you what the screen size is
   void resize(Size size) {
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
+    width = size.width;
+    height = size.height;
   }
 
   bool destroy() => lives <= 0;

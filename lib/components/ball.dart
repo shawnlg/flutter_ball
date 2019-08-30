@@ -15,11 +15,11 @@ class Ball extends Component {
   double speedScaleY;  // how many times screen width the y speed will be
   double x;  // the x location of the ball
   double y;  // the y location of the ball
-  double speedX=0;  // speed in the x direction
-  double speedY=0;  // speed in the y direction
-  double sizeX=0;  // size of the screen in the x direction
-  double sizeY=0;  // size of the screen in the y direction
-  int lives = 10;  // how many bounces until the ball dies
+  double speedX;  // speed in the x direction
+  double speedY;  // speed in the y direction
+  double width=0;  // size of the screen in the x direction
+  double height=0;  // size of the screen in the y direction
+  int lives;  // how many bounces until the ball dies
   Paint paint = Paint();  // paint the ball circle
   final bool sound; // if bounce sound
   bool ignoreTop;  // go through top of screen instead of bouncing off it
@@ -30,7 +30,8 @@ class Ball extends Component {
   // create a ball
   Ball(this.game, {this.x=0, this.y=0, this.sound=false, this.lives=100,
        this.ignoreTop:false, this.ignoreBottom:false, this.ignoreLeft:false, this.ignoreRight:false,
-       Color color=Colors.white, double size=10, double speedX=1, double speedY=1, PaintingStyle style = PaintingStyle.stroke}) : super() {
+       Color color=Colors.white, double size=10, double speedX=1, double speedY=1,
+    PaintingStyle style = PaintingStyle.stroke}) : super() {
     paint.color = color;
     paint.strokeWidth = 1;
     paint.style = style;
@@ -42,13 +43,13 @@ class Ball extends Component {
   // the game engine will tell you what the screen size is
   void resize(Size size) {
     // save screen width and height
-    sizeX = size.width;
-    sizeY = size.height;
+    width = size.width;
+    height = size.height;
 
     // set the speed of the ball
-    // travel in the x and y direction at the speed of speedScale screen widths/heights per second
-    speedX = sizeX*speedScaleX;
-    speedY = sizeY*speedScaleY;
+    // travel in the x and y direction at the speed of speedScale screen widths per second
+    speedX = width*speedScaleX;
+    speedY = height*speedScaleY;
   }
 
   // draw this component whenever the game engine tells you to
@@ -59,7 +60,7 @@ class Ball extends Component {
   // update this component whenever the game engine tells you to
   void update(double t) {
     // don't update until size is set
-    if (sizeX < 1 || sizeY < 1) return;
+    if (width < 1 || height < 1) return;
 
     // move the ball
     x += t*speedX;
@@ -80,9 +81,9 @@ class Ball extends Component {
       x = 0;  // move back into screen
       if (ignoreLeft) lives=0;  // off the screen
       return true;
-    } else if (x > sizeX) {
+    } else if (x > width) {
       speedX = -speedX;  // reverse x direction
-      x = sizeX;  // move back into screen
+      x = width;  // move back into screen
       if (ignoreRight) lives=0;  // off the screen
       return true;
     } else if (y < 0) {
@@ -90,9 +91,9 @@ class Ball extends Component {
       y = 0;  // move back into screen
       if (ignoreTop) lives=0;  // off the screen
       return true;
-    } else if (y > sizeY) {
+    } else if (y > height) {
       speedY = -speedY;  // reverse y direction
-      y = sizeY;  // move back into screen
+      y = height;  // move back into screen
       if (ignoreBottom) lives=0;  // off the screen
       return true;
     } else {
@@ -109,13 +110,13 @@ class Ball extends Component {
       if (component is Block) {
         Block block = component;  // reference this component as a block
 
-        if (block.bounce && block.position.contains(Offset(x,y))) {
+        if (block.position.contains(Offset(x,y))) {
           // ball is inside this block, so we bounced
           bounced = true;
           block.lives--;
 
           // bounce off of block
-          if (block.draggable == false) {
+          if (block.draggableBlock == false) {
             normalBounce(block);
           } else {  // a draggable block is one you use to aim with
             aimBounce(block);
@@ -155,7 +156,6 @@ class Ball extends Component {
     double closestX = min(x - block.position.left, block.position.right - x);
     double closestY = min(y - block.position.top, block.position.bottom - y);
     double totalSpeed = speedX.abs() + speedY.abs();  // we divide up the speed by how the block is hit
-    //print("aimBounce speeX=$speedX, speedY=$speedY, totalSpeed=$totalSpeed");
 
     if (closestX < closestY) {
       // we are closest to the left/right of the block, so we hit a vertical edge
@@ -167,7 +167,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the y direction.
         double middle = (block.position.top + block.position.bottom) / 2;
         double aim = (y - middle)/block.position.height*2;
-        //print("bounce left edge, aim=$aim");
         speedY = totalSpeed * aim;  // ball can go up or down depending on aim
         speedX = -(totalSpeed - speedY.abs()); // ball goes to the left
       } else {
@@ -178,7 +177,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the y direction.
         double middle = (block.position.top + block.position.bottom) / 2;
         double aim = (y - middle)/block.position.height*2;
-        //print("bounce right edge, aim=$aim");
         speedY = totalSpeed * aim;  // ball can go up or down depending on aim
         speedX = totalSpeed - speedY.abs(); // ball goes to the right
       }
@@ -192,7 +190,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the x direction.
         double middle = (block.position.left + block.position.right) / 2;
         double aim = (x - middle)/block.position.width*2;
-        //print("bounce top edge, aim=$aim");
         speedX = totalSpeed * aim;  // ball can go left or right depending on aim
         speedY = -(totalSpeed - speedX.abs()); // ball goes up
       } else {
@@ -203,7 +200,6 @@ class Ball extends Component {
         // This number determines how much of the speed goes in the x direction.
         double middle = (block.position.left + block.position.right) / 2;
         double aim = (x - middle)/block.position.width*2;
-        //print("bounce bottom edge, aim=$aim");
         speedX = totalSpeed * aim;  // ball can go left or right depending on aim
         speedY = totalSpeed - speedX.abs(); // ball goes down
       }

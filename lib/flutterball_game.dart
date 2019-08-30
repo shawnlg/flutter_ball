@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_ball/components/ball_releaser.dart';
+import 'package:flutter_ball/components/text.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
@@ -22,28 +22,20 @@ class FlutterballGame extends BaseGame {
 
   // make a new game
   FlutterballGame() {
-    // make new block game components
-    var block = Block(this, position: Rect.fromLTWH(30, 200, 300, 250),
-        displayText: "This\nis\na\ntest", color: Colors.black, borderColor: Colors.blue,
-        textStyle: TextStyle(fontSize: 20),
-    );
-
-    // tell the game about this component
-//    add(block);
     Block.canDrag = true;  // ok to drag
     GameIntro intro = GameIntro(this);
     add(intro);
   }
 
-  // remove all ball and block components from the game
+  // remove all ball, text, and block components from the game
   void clearComponents() {
     components.forEach((c) {
       if (c is Block) {
-        Block block = c;
-        block.lives = 0;
+        c.lives = 0;
       } else if (c is Ball) {
-        Ball ball = c;
-        ball.lives = 0;
+        c.lives = 0;
+      } else if (c is TextDraw) {
+        c.lives = 0;
       }
     });
   }
