@@ -8,13 +8,13 @@ import 'package:flutter_ball/components/text.dart';
 // set up splash screen for level
 void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
   const List<String> LEVEL_TEXT = [
-    "Practice aiming your ball.\nHit the block by launching the ball at it.",
-    "Practice aiming your ball using the red aim block.\nHit the block 3 times.",
+    "Practice aiming your ball. Hit the block by launching the ball at it.",
+    "Practice aiming your ball using the red aim block. Hit the block 3 times.",
     "Break all of the blocks.",
-    "Break all of the blocks.\nWatch out for the bottom!",
-    "Break all of the blocks.\nThey don't break so easily",
+    "Break all of the blocks. Watch out for the bottom!",
+    "Break all of the blocks. They don't break so easily",
     "Break the square.",
-    "Break the square.\nCan you do it without falling off the screen?",
+    "Break the square. Can you do it without falling off the screen?",
     "Let's speed things up.",
     "Let the ball do the work.",
     "Time to face the challenge.",
@@ -24,14 +24,14 @@ void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
 
   TextStyle style = TextStyle(fontSize: 20, color: Colors.blue,);
   TextSpan span = TextSpan(text: "Level ${game.level}\n", style: style);
-  TextDraw textBox = TextDraw(Rect.fromLTWH(0, 0, gp.sizeX, gp.sizeY), span,
+  TextDraw textBox = TextDraw(Rect.fromLTWH(0, 0, gp.width, gp.height), span,
     boxColor: null, borderColor: null,
   );
   game.add(textBox);
 
   style = TextStyle(fontSize: 12, color: Colors.blue,);
   span = TextSpan(text: LEVEL_TEXT[game.level - 1], style: style);
-  textBox = TextDraw(Rect.fromLTWH(0, 50, gp.sizeX, 50), span,
+  textBox = TextDraw(Rect.fromLTWH(0, 50, gp.width, 50), span,
     boxColor: null, borderColor: null,
   );
   game.add(textBox);
@@ -40,7 +40,7 @@ void makeLevelSplashScreen(FlutterballGame game, GamePlay gp) {
 // add a block using fraction of screen sizes instead of pixels
 void addBlock(FlutterballGame game, GamePlay gp, double x, double y, double width,
     {Color color : Colors.blue, int lives : 10, }) {
-  Rect position = Rect.fromLTWH(x*gp.sizeX, y*gp.sizeY, width*gp.sizeX, width*gp.sizeX);
+  Rect position = Rect.fromLTWH(x*gp.width, y*gp.height, width*gp.width, width*gp.width);
   Block block = Block(game, position: position,
     color: color, borderColor: Colors.black,
     draggableBlock: false, lives: lives,
@@ -61,7 +61,7 @@ void addBlockExact(FlutterballGame game, GamePlay gp, double x, double y, double
 
 void addAimBlock(FlutterballGame game, GamePlay gp, double x, double y, double width, double height,
     {Color color : Colors.red, int lives : 10, }) {
-  Rect position = Rect.fromLTWH(x*gp.sizeX, y*gp.sizeY, width*gp.sizeX, height*gp.sizeY);
+  Rect position = Rect.fromLTWH(x*gp.width, y*gp.height, width*gp.width, height*gp.height);
   Block block = Block(game, position: position,
     color: color, borderColor: Colors.black,
     draggableBlock: true, lives: lives,
@@ -72,7 +72,6 @@ void addAimBlock(FlutterballGame game, GamePlay gp, double x, double y, double w
 
 // set up game for a particular level
 void makeLevel(FlutterballGame game, GamePlay gp) {
-  print("makeLevel ${game.level}");
   game.clearComponents();
   gp.speedScale = 0.0; // default
   switch (game.level) {
@@ -153,10 +152,10 @@ void makeLevel(FlutterballGame game, GamePlay gp) {
       gp.ignoreRight = false;
       break;
     case 6: // square of blocks
-      double width = 0.1 * gp.sizeX;
-      double col1 = 0.35*gp.sizeX;
-      double col2 = 0.45*gp.sizeX;
-      double col3 = 0.55*gp.sizeX;
+      double width = 0.1 * gp.width;
+      double col1 = 0.35*gp.width;
+      double col2 = 0.45*gp.width;
+      double col3 = 0.55*gp.width;
       double row1 = 30.0;
       double row2 = row1 + width;
       double row3 = row1 + 2*width;
@@ -180,10 +179,10 @@ void makeLevel(FlutterballGame game, GamePlay gp) {
       gp.ignoreRight = false;
       break;
     case 7: // square no sides
-      double width = 0.1 * gp.sizeX;
-      double col1 = 0.35*gp.sizeX;
-      double col2 = 0.45*gp.sizeX;
-      double col3 = 0.55*gp.sizeX;
+      double width = 0.1 * gp.width;
+      double col1 = 0.35*gp.width;
+      double col2 = 0.45*gp.width;
+      double col3 = 0.55*gp.width;
       double row1 = 30.0;
       double row2 = row1 + width;
       double row3 = row1 + 2*width;
@@ -207,10 +206,10 @@ void makeLevel(FlutterballGame game, GamePlay gp) {
       gp.ignoreRight = true;
       break;
     case 8: // speed it up
-      double width = 0.1 * gp.sizeX;
-      double col1 = 0.35*gp.sizeX;
-      double col2 = 0.45*gp.sizeX;
-      double col3 = 0.55*gp.sizeX;
+      double width = 0.1 * gp.width;
+      double col1 = 0.35*gp.width;
+      double col2 = 0.45*gp.width;
+      double col3 = 0.55*gp.width;
       double row1 = 30.0;
       double row2 = row1 + width;
       double row3 = row1 + 2*width;
@@ -262,11 +261,11 @@ void makeLevel(FlutterballGame game, GamePlay gp) {
       gp.ignoreRight = false;
       break;
     case 10: // face
-      double width = 0.1 * gp.sizeX;
-      double leftEyeCol1 = 0.15*gp.sizeX;
-      double leftEyeCol2 = 0.25*gp.sizeX;
-      double rightEyeCol1 = 0.6*gp.sizeX;
-      double rightEyeCol2 = 0.7*gp.sizeX;
+      double width = 0.1 * gp.width;
+      double leftEyeCol1 = 0.15*gp.width;
+      double leftEyeCol2 = 0.25*gp.width;
+      double rightEyeCol1 = 0.6*gp.width;
+      double rightEyeCol2 = 0.7*gp.width;
 
       double eyesRow1 = width;
       double eyesRow2 = eyesRow1 + width;
@@ -280,7 +279,7 @@ void makeLevel(FlutterballGame game, GamePlay gp) {
       addBlockExact(game,gp, rightEyeCol2, eyesRow1, width, lives: 5);
       addBlockExact(game,gp, rightEyeCol2, eyesRow2, width, lives: 5);
 
-      double noseCenterCol = 0.45*gp.sizeX;
+      double noseCenterCol = 0.45*gp.width;
       double noseLeftCol = noseCenterCol - 0.5*width;
       double noseRightCol = noseCenterCol + 0.5*width;
       double noseRow1 = width*6;
