@@ -38,9 +38,13 @@ class Shape extends Component {
 
   // create a shape
   Shape(this.game, this.points, {lives:10, Color color=Colors.white, Color borderColor=Colors.white,
-        this.x, this.y,
+        this.x, this.y, this.r,
+        xDelta:0.0, yDelta:0.0, rDelta:0.0,
         double borderThickness=1,
     }) : super() {
+    dx = xDelta;
+    dy = yDelta;
+    dr = rDelta;
     if (color == null) {
       paint = null;
     } else {
@@ -54,17 +58,18 @@ class Shape extends Component {
       border.style = PaintingStyle.stroke;
       border.strokeWidth = borderThickness;
     }
-    this.lives = lives;
 
     normalize();  // center shape around 0,0
     transform();  // move/rotate shape if necessary
+    this.lives = lives;
   }
 
   void set lives (int l) {
     _lives = l;
     TextSpan span = TextSpan(text: _lives.toString(), style: TextStyle(color: Colors.black));
     tp.text = span;  // text to draw
-    tp.layout(minWidth: drawPath.getBounds().width, );
+    double width = drawPath.getBounds().width;
+    tp.layout(minWidth: 10, );
   }
 
 
@@ -88,17 +93,19 @@ class Shape extends Component {
   }
 
   // rotate a point around 0,0 by angle
-  Offset rotatePoint(Offset point, double angle) {
+  // then move it by x,y
+  static Offset rotatePoint(Offset point, double angle, double x, double y) {
     angle = angle * (pi/180); // Convert to radians
-    var x = cos(angle) * point.dx - sin(angle) * point.dy;
-    var y = sin(angle) * point.dx + cos(angle) * point.dy;
-    return Offset(x,y);
+    var _x = cos(angle) * point.dx - sin(angle) * point.dy;
+    var _y = sin(angle) * point.dx + cos(angle) * point.dy;
+    return Offset(_x+x,_y+y);
   }
 
   // rotate a list of points around 0,0 by angle
-  List<Offset> rotatePoints(List<Offset> points, double angle) {
+  // then move them by x,y
+  static List<Offset> rotatePoints(List<Offset> points, double angle, double x, double y) {
     var newPoints = List<Offset>();
-    points.forEach((point) => newPoints.add(rotatePoint(point,angle)));
+    points.forEach((point) => newPoints.add(rotatePoint(point,angle,x,y)));
     return newPoints;
   }
 
@@ -107,13 +114,13 @@ class Shape extends Component {
     // see if we need to rotate
     if (r != _r) {
       // rotation angle changed
-      List<Offset> newPoints = rotatePoints(points,r);
+      List<Offset> newPoints = rotatePoints(points,r,x,y);
       drawPath = Path();  // new path with rotated points
       drawPath.addPolygon(newPoints, true);
       _r = r;  // reset previous
-      _x = 0;  // we put shape back to 0,0
-      _y = 0;
-      _points = null;  // need to recreate if needed
+      _x = x;  // we put shape back to 0,0
+      _y = y;
+      _points = newPoints;  // points are up to date with path
     }
 
     // see if we need to move
@@ -132,7 +139,7 @@ class Shape extends Component {
   void render(Canvas c) {
     if (paint != null) c.drawPath(drawPath, paint);
     if (border != null) c.drawPath(drawPath, border);
-    tp.paint(c, drawPath.getBounds().center.translate(0, 10));
+    tp.paint(c, Offset(x-10,y-10));
   }
 
   void update(double t) {
@@ -144,6 +151,6 @@ class Shape extends Component {
   }
 
 
-  bool destroy() => lives <= 0;
+  bool destroy() => _lives <= 0;
 
 }

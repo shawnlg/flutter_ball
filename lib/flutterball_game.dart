@@ -6,7 +6,8 @@ import 'package:flutter_ball/components/text.dart';
 import 'package:flutter_ball/components/interactive_ball_releaser.dart';
 import 'package:flutter_ball/components/block.dart';
 import 'package:flutter_ball/components/ball.dart';
-import 'package:flutter_ball/components/game_intro.dart';
+import 'package:flutter_ball/components/shape.dart';
+import 'package:flutter_ball/components/test_component.dart';
 
 class FlutterballGame extends BaseGame {
   // instance variables
@@ -22,9 +23,12 @@ class FlutterballGame extends BaseGame {
 
   // make a new game
   FlutterballGame() {
-    Block.canDrag = true;  // ok to drag
-    GameIntro intro = GameIntro(this);
-    add(intro);
+//    List<Offset>points = [Offset(0,0),Offset(100,0), Offset(100,100), Offset(0,100)];
+//    Shape shape = Shape(this,points,x: 100.0 ,y: 100.0, r:0.0, rDelta: 30.0,);
+//    add(shape);
+
+    Tester tester = Tester();
+    add(tester);
   }
 
   // remove all ball, text, and block components from the game
