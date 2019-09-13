@@ -1,16 +1,12 @@
 # flutter_ball
 
-A new Flutter application.
+This is a tutorial for writing a game using the Flutter Flame game engine.
 
-## Getting Started
+You should go through the branches in numeric order to see the code for the various sections of the tutorial.
 
-This project is a starting point for a Flutter application.
+Look at the 99_docs branch to see the slides for the tutorial.  The slides will tell you which branch they cover.
 
-A few resources to get you started if this is your first Flutter project:
+The master branch has experimental code or bug fixes and should not be used as a flutter project directly.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
+Contributing
