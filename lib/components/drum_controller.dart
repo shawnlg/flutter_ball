@@ -1,9 +1,11 @@
 import 'dart:ui';
+
 import 'package:flame/components/component.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter_ball/flutterball_game.dart';
-import 'package:flutter_ball/components/drum.dart';
+
+import '../audio_helper.dart';
+import '../flutterball_game.dart';
+import 'drum.dart';
 
 enum State {
   STARTUP,  // game is starting up, no size yet
@@ -54,7 +56,7 @@ class DrumController extends Component {
     if (state == State.RECORD) {
       if (currentBeat == metroBeat) {
         String sound = metroBeat == 0 ? METRONOME_LOUD_SOUND : METRONOME_SOFT_SOUND;
-        Flame.audio.play(sound);
+        AudioHelper.play(sound);
 
         // set next metronome beat
         metroBeat += METRONOME_BEATS;
@@ -65,12 +67,12 @@ class DrumController extends Component {
 
       // play any sound recorded
       if (drumTrack[currentBeat] != null) {
-        Flame.audio.play(drumTrack[currentBeat]);
+        AudioHelper.play(drumTrack[currentBeat]);
       }
     } else if (state == State.PLAY) {
       // play any sound recorded
       if (drumTrack[currentBeat] != null) {
-        Flame.audio.play(drumTrack[currentBeat]);
+        AudioHelper.play(drumTrack[currentBeat]);
       }
     } // state
 
@@ -135,7 +137,7 @@ class DrumController extends Component {
         // see if user tapped on record button
         if (game.wasTapped && button1Rect.contains(Offset(game.tapX,game.tapY))) {
           game.wasTapped = false;  // reset tap
-          Flame.audio.play(BUTTON_PRESS_SOUND);
+          AudioHelper.play(BUTTON_PRESS_SOUND);
           state = State.RECORD;
           currentBeat = 0;  // start of pattern
           timeNextBeat = game.currentTime() + 1;  // start first beat soon
@@ -146,7 +148,7 @@ class DrumController extends Component {
         // see if user tapped on play button
         if (game.wasTapped && button2Rect.contains(Offset(game.tapX,game.tapY))) {
           game.wasTapped = false;  // reset tap
-          Flame.audio.play(BUTTON_PRESS_SOUND);
+          AudioHelper.play(BUTTON_PRESS_SOUND);
           state = State.PLAY;
           currentBeat = 0;  // start of pattern
           timeNextBeat = game.currentTime() + 1;  // start playing soon
@@ -157,7 +159,7 @@ class DrumController extends Component {
         // see if user tapped on stop button
         if (game.wasTapped && button2Rect.contains(Offset(game.tapX,game.tapY))) {
           game.wasTapped = false;  // reset tap
-          Flame.audio.play(BUTTON_PRESS_SOUND);
+          AudioHelper.play(BUTTON_PRESS_SOUND);
           state = State.TAP;
         }
 
@@ -166,7 +168,7 @@ class DrumController extends Component {
         // see if user tapped on stop button
         if (game.wasTapped && button2Rect.contains(Offset(game.tapX,game.tapY))) {
           game.wasTapped = false;  // reset tap
-          Flame.audio.play(BUTTON_PRESS_SOUND);
+          AudioHelper.play(BUTTON_PRESS_SOUND);
           state = State.TAP;
         }
 

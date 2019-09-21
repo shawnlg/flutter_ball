@@ -1,7 +1,9 @@
 import 'dart:ui';
-import 'package:flutter/material.dart';
+
 import 'package:flame/components/component.dart';
-import 'package:flame/flame.dart';
+import 'package:flutter/material.dart';
+
+import '../audio_helper.dart';
 
 class Ball extends Component {
   // instance variables
@@ -81,7 +83,7 @@ class Ball extends Component {
 
     if (bounce) {
       // play sound
-      Flame.audio.play('bounce.wav');
+      AudioHelper.play('bounce.wav');
     }
 
   }
